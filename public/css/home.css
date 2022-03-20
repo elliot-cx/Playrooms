@@ -1,6 +1,7 @@
 /*============ Background ============*/  
 
 .base > .background{
+    display: none;
     position: absolute;
     overflow: hidden;
     height: 100%;
@@ -64,6 +65,9 @@ body > .base{
 /*============ Responsive ============*/  
 
 @media screen and (min-width:1000px) {
+    .base > .background{
+        display: block;
+    }
     .room-form{
         flex-flow: row;
     }  
