@@ -1,0 +1,81 @@
+/*============ Background ============*/  
+
+.base > .background{
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
+
+.base > .background div{
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.596);
+    border-radius: 50%;
+    filter: blur(4px);
+}
+
+/*============ Main ============*/  
+
+body > .base{
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.top{
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.main{
+    display: flex;
+    flex-flow: column;
+}
+
+.room-form{
+    display: flex;
+    flex-flow: column;
+}
+
+.player-entry{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.player-entry > .profile-picture{
+    margin-right: 0.5rem;
+}
+
+.rules{
+    max-width: 320px;
+    /* max-height: ; */
+}
+
+.rules > h2{
+    text-align: center;
+}
+
+/*============ Responsive ============*/  
+
+@media screen and (min-width:1000px) {
+    .room-form{
+        flex-flow: row;
+    }  
+    .main{
+        flex-flow: row;
+        margin-top: 2rem;
+    }
+    .rules{
+        max-width: 600px;
+    }
+
+    .player-entry{
+        flex-flow: row;
+    }
+}
