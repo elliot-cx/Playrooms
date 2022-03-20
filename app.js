@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const port = process.env.PORT || 3000;
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const path = require('path');
@@ -14,7 +15,7 @@ app.get('/',(req,res) => {
 });
 
 //,'25.46.22.91'
-server.listen(3000,()=>{ 
+server.listen(port,()=>{ 
     console.log('Server is listening...')
 });
 
