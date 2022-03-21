@@ -67,6 +67,21 @@ h1,h2,h3,div{
     user-select: none;
 }
 
+button,
+textarea,
+input,
+select,
+.upload,
+a{
+ -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+ -webkit-tap-highlight-color: transparent;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+  user-select: none;
+}
+
 h1{
     font-family: var(--title-font);
     font-size: var(--biggest-font-size);
@@ -120,12 +135,6 @@ button{
     transition: 0.3s ease-out;  
     width: 100%;
     font-weight: var(--font-medium);
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 button:hover{

@@ -19,9 +19,10 @@ app.get('/[a-zA-Z]{4}',(req,res)=>{
     //
 });
 
-app.post('/api',(req,res)=>{
+app.post('/api/:action(start|join)',(req,res)=>{
+    res.json({"partyCode":req.params.action})
     // lobby.create()
-    res.json({"code":"ok"});
+    // res.json({"code":"ok"});
 });
 
 app.get('*',(req,res)=>{

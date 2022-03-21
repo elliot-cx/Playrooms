@@ -30,6 +30,7 @@ for (let index = 0; index < 20; index++) {
 
 //DOM Elements
 
+const playForm = document.querySelector('.room-form form');
 const playButton = document.getElementById('play');
 const profilePictureInput = document.getElementById('picture-upload');
 const profilePicture = document.querySelector('.upload');
@@ -38,7 +39,7 @@ const nicknameInput = document.getElementById('nickname');
 
 //Events
 
-playButton.addEventListener('click',play);
+playButton.addEventListener('click', startGame);
 profilePictureInput.addEventListener('change',upload);
 profilePicture.addEventListener('click', () => {
     profilePictureInput.click();
@@ -46,9 +47,13 @@ profilePicture.addEventListener('click', () => {
 
 //Play form event
 
-function play(){
-    preventDefault();
-    postJson('/api/',)
+function startGame(){
+    if (playForm.checkValidity()){
+        postJson('/api/start',{creatorToken : userToken},(res)=>{
+            if (res.errorCode) return;
+            location.href = `/${res.partyCode}`;
+        });
+    }
 }
 
 function upload(){
@@ -56,7 +61,6 @@ function upload(){
         const imageUrl = URL.createObjectURL(this.files[0]);
         setupUserPictureFromUrl(imageUrl,() => URL.revokeObjectURL(imageUrl));
     }
-    profilePictureInput.blur();
 }
 
 //Set Profile Image
