@@ -46,11 +46,22 @@ body > .base{
     flex-flow: column;
     align-items: center;
     margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
 }
 
 .player-entry > .profile-picture{
     margin-right: 0.5rem;
+}
+
+.nickname-entry{
+    width: 100%;
+}
+
+.nickname-entry > h3{
+    padding: 0.3rem 0 0.3rem 0;
+}
+
+#nickname{
+    width: 100%;
 }
 
 .rules{
@@ -80,6 +91,10 @@ body > .base{
     }
 
     .player-entry{
+        margin-bottom: 0.5rem;
         flex-flow: row;
+    }
+    .nickname-entry{
+        width: auto;
     }
 }

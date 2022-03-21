@@ -1,3 +1,5 @@
+//JSON Post and Get
+
 const headers = { "Content-Type": "application/json" };
 
 function postJson(url, body, callback) {
@@ -19,6 +21,8 @@ function getJson(url, callback) {
     .catch((error) => { callback({ errorCode: error.message }); });
 }
 
+//Random functions
+
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -32,5 +36,3 @@ function randomString(len, charSet) {
     }
     return randomString;
 }
-
-Math.random().toString(36).substr(2,4).toUpperCase();

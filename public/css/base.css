@@ -13,7 +13,7 @@
     --background-gradient: linear-gradient(120deg, rgba(65,126,255,1) 0%, rgba(3,8,103,1) 100%);
     --reverse-background-gradient : linear-gradient(120deg, rgba(3,8,103,1) 0%, rgba(65,126,255,1) 100%);
     --text-color: rgb(255, 255, 255);
-    --dark-text-color: rgb(112, 112, 112);
+    --dark-text-color: rgb(85, 84, 84);
     --shadow-box: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
     /*============ Fonts et typo ============*/
@@ -62,6 +62,10 @@
 }
 
 /*============ Base Components ============*/    
+
+h1,h2,h3,div{
+    user-select: none;
+}
 
 h1{
     font-family: var(--title-font);
@@ -131,9 +135,13 @@ button:hover{
     margin: 0.5rem;
 }
 
+.upload{
+    cursor: pointer;
+}
+
 .profile-picture{
-    width: 128px;
-    height: 128px;
+    min-width: 128px;
+    min-height: 128px;
     border-radius: 50%;
     box-shadow: var(--shadow-box);
     background-size: cover;
@@ -141,15 +149,10 @@ button:hover{
     
 }
 
-.upload{
-    cursor: pointer;
-}
-
-
 .profile-picture.upload::before{ 
     width: 128px;
-    height: 78px;
-    padding-top: 50px;
+    height: 84px;
+    padding-top: 44px;
     position: absolute;
     text-align: center;
     justify-content: center;
