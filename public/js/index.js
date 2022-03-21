@@ -56,7 +56,7 @@ function upload(){
         const imageUrl = URL.createObjectURL(this.files[0]);
         setupUserPictureFromUrl(imageUrl,() => URL.revokeObjectURL(imageUrl));
     }
-    this.blur();
+    profilePictureInput.blur();
 }
 
 //Set Profile Image
