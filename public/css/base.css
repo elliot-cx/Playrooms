@@ -113,6 +113,8 @@ input{
     /* margin-top: 0.5rem; */
     color: var(--dark-text-color);
     outline: none;
+    user-select: text;
+    -webkit-user-select: text;
     -webkit-transition: 0.1s ease-out;  
     -moz-transition: 0.1s ease-out;  
     -o-transition: 0.1s ease-out;  
