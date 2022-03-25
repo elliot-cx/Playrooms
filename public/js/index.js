@@ -29,6 +29,7 @@ function startGame(){
             window.location.href = `/${res.partyCode}`;
         });
     }
+    return false;
 }
 
 function upload(){
