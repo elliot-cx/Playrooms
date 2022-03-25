@@ -28,8 +28,8 @@ function startGame(){
             savePlayerProfile();
             window.location.href = `/${res.partyCode}`;
         });
+        return false;
     }
-    return false;
 }
 
 function upload(){
