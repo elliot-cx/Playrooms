@@ -20,8 +20,9 @@ profilePicture.addEventListener('click', () => {
 
 //Play form event
 
-function startGame(){
+function startGame(event){
     if (playForm.checkValidity()){
+        event.preventDefault();
         postJson('/api/start',{creatorToken : userToken},(res)=>{
             if (res.errorCode) return;
             playerProfile.nickname = nicknameInput.value;
