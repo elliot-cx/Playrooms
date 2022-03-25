@@ -26,9 +26,8 @@ function startGame(){
             if (res.errorCode) return;
             playerProfile.nickname = nicknameInput.value;
             savePlayerProfile();
-            window.location.replace(`/${res.partyCode}`);
+            window.location.assign(`/${res.partyCode}`);
         });
-        return false;
     }
 }
 
