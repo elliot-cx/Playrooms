@@ -11,7 +11,7 @@
     <meta property="og:description" content="Questions pour un pigeon, jouez en ligne avec vous amis !">
     <meta property="og:image" content="http://playrooms.fr/img/Icon.png">
     <meta property="og:url" content="http://playrooms.fr/">
-    <title>Questions pour un pigeon !</title>
+    <title>Playrooms</title>
 </head>
 <!--
     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -38,8 +38,6 @@
 <body>
     <div class="base">
         <div class="background"></div>
-        <div class="loading page" hidden></div>
-        <div class="error page" hidden></div>
         <div class="home page">
             <div class="top">
                 <h1>Questions pour un <br>Pigeon</h1>
@@ -53,7 +51,7 @@
                             <div class="profile-picture upload"></div>
                             <div class="nickname-entry">
                                 <h3>Choisis un surnom</h3>
-                                <input id="nickname" type="text" placeholder="Benslimoune" minlength="2" maxlength="30" autocomplete="off" required="required">
+                                <input id="nickname" type="text" placeholder="Benslimoune" minlength="2" maxlength="30" autocomplete="off" required="required" spellcheck="false">
                             </div>
                         </div>
                         <button type="submit" id="play">Jouer</button>
@@ -73,10 +71,10 @@
             </div>
         </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
     <script src="/animejs/anime.min.js"></script>
     <script src="/js/utils.js"></script>
     <script src="/js/settings.js"></script>
+    <script src="/js/base.js"></script>
     <script src="/js/index.js"></script>
 </body>
 </html>

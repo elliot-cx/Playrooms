@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/game.css">
+    <meta property="og:title" content="Playrooms : Questions pour un pigeon">
+    <meta property="og:description" content="Questions pour un pigeon, jouez en ligne avec vous amis !">
+    <meta property="og:image" content="http://playrooms.fr/img/Icon.png">
+    <meta property="og:url" content="http://playrooms.fr/">
+    <title>Questions pour un pigeon !</title>
+</head>
+<!--
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣶⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣿⠿⠟⠛⠻⣿⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣆⣀⣀⠀⣿⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠻⣿⣿⣿⠅⠛⠋⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢼⣿⣿⣿⣃⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣟⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣛⣛⣫⡄⠀⢸⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⡆⠸⣿⣿⣿⡷⠂⠨⣿⣿⣿⣿⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⡇⢀⣿⡿⠋⠁⢀⡶⠪⣉⢸⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⡏⢸⣿⣷⣿⣿⣷⣦⡙⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣇⢸⣿⣿⣿⣿⣿⣷⣦⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣵⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⡁⠀⠀
+
+                           Never Gonna Give You Up
+-->
+<body>
+    <div class="base">
+        <div class="background"></div>
+        <div class="loading page" hidden></div>
+        <div class="error page" hidden>
+            <div class="box">
+                <h2>Deconnexion</h2>
+                <p>Tu as été deconnecté !</p>
+            </div>
+        </div>
+        <div class="lobby page" hidden>
+            <div class="players-container box">
+                <h2>Partie de Benslimoune</h2>
+                <div>
+                    <div class="player-container">
+                        <div class="profile-picture"></div>
+                        <p>Benslimoune</p>
+                    </div>
+                    <div class="player-container">
+                        <div class="profile-picture"></div>
+                        <p>Benslimoune</p>
+                    </div>
+                    <div class="player-container">
+                        <div class="profile-picture"></div>
+                        <p>Benslimoune</p>
+                    </div>
+                    <div class="player-container">
+                        <div class="profile-picture"></div>
+                        <p>Benslimoune</p>
+                    </div>
+                    <div class="player-container">
+                        <div class="profile-picture"></div>
+                        <p>Benslimoune</p>
+                    </div>
+
+                </div>
+                <button>Démarrer la partie</button>
+            </div>
+        </div>
+        <div class="profile page">
+            <div class="top">
+                <h1>Questions pour un <br>Pigeon</h1>
+            </div>
+            <div class="main">
+                <div class="room-form box">
+                    <form>
+                        <header><h2>Rejoindre un salon :</h2></header>
+                        <div class="player-entry">
+                            <input type="file" id="picture-upload" hidden>
+                            <div class="profile-picture upload"></div>
+                            <div class="nickname-entry">
+                                <h3>Choisis un surnom</h3>
+                                <input id="nickname" type="text" placeholder="Benslimoune" minlength="2" maxlength="30" autocomplete="off" required="required" spellcheck="false">
+                            </div>
+                        </div>
+                        <button type="submit" id="play">Jouer</button>
+                    </form>
+                </div>
+                <div class="rules box">
+                    <h2>Comment Jouer ?</h1>
+                    <div>
+                        2 équipes vont s'affronter à tour de rôle, à chaque tour, 
+                        les équipes vont obtenir une carte contenant une question avec la réponse associée,
+                        elles devront inventer 2 fausses réponses, l'équipe adverse
+                        devra alors parier l'intégralité de ses jetons sur une ou plusieurs
+                        réponses, les jetons placés sur les mauvaises réponses sont perdus,
+                        l'équipe qui ne possède plus de jetons perd.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game page" hidden>
+            <div class="top">
+                <h1>Questions pour un <br>Pigeon</h1>
+            </div>
+            <div class="main">
+                
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/animejs/anime.min.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="/js/game.js"></script>
+</body>
+</html>

@@ -11,6 +11,19 @@ function getUserToken() {
     return token;
 }
 
-function savePlayerProfile() {
-    //
+const playerProfile = getPlayerProfile();
+
+function getPlayerProfile() {
+    profile = JSON.parse(localStorage.getItem('playerProfile'));
+    if(profile == undefined){
+        profile = {
+            nickname : null,
+            picture : null
+        }
+    }
+    return profile;
+}
+
+function savePlayerProfile(nickname,picture) {
+    localStorage.setItem('playerProfile',JSON.stringify(playerProfile));
 }
