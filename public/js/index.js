@@ -26,7 +26,7 @@ function startGame(){
             if (res.errorCode) return;
             playerProfile.nickname = nicknameInput.value;
             savePlayerProfile();
-            window.location.href = `http://playrooms.fr/${res.partyCode}`;
+            window.location.href = `/${res.partyCode}`;
         });
     }
 }
