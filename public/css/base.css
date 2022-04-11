@@ -10,8 +10,8 @@
 
     --first-color: rgb(65,126,255);
     --second-color: rgba(3,8,103,1);
-    --background-gradient: linear-gradient(120deg, rgba(65,126,255,1) 0%, rgba(3,8,103,1) 100%);
-    --reverse-background-gradient : linear-gradient(120deg, rgba(3,8,103,1) 0%, rgba(65,126,255,1) 100%);
+    --background-gradient: linear-gradient(120deg, var(--first-color) 0%, var(--second-color) 100%);
+    --reverse-background-gradient : linear-gradient(120deg,var(--second-color) 0%, var(--first-color)  100%);
     --text-color: rgb(255, 255, 255);
     --dark-text-color: rgb(85, 84, 84);
     --shadow-box: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -33,6 +33,10 @@
     --font-light:300;
     --font-regular:400;
     --font-medium:500; 
+
+    /*============== Effects ===============*/
+
+    --blur:blur(5px);
 }
 
 /*============ Responsive ============*/
@@ -73,13 +77,18 @@ input,
 select,
 .upload,
 a{
- -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
- -webkit-tap-highlight-color: transparent;
- -webkit-user-select: none;
- -khtml-user-select: none;
- -moz-user-select: none;
- -ms-user-select: none;
-  user-select: none;
+    color: var(--first-color);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+a:visited{
+    color: var(--first-color);
 }
 
 h1{
@@ -99,6 +108,11 @@ h3{
 
 div{
     display: block;
+}
+
+.scrollable{
+    overflow-y: auto;
+    overflow-x: visible;
 }
 
 /*============ Inputs ============*/    
@@ -141,10 +155,12 @@ button{
     transition: 0.3s ease-out;  
     width: 100%;
     font-weight: var(--font-medium);
+    box-shadow: var(--shadow-box);
 }
 
 button:hover{
     background-color: var(--second-color);
+    /* filter: brightness(0.85); */
 }
 
 button:disabled{
@@ -205,6 +221,7 @@ button:disabled{
     align-items: center;
     padding: 0.3rem;
     margin-top: 0.3rem;
+    border-radius: 10px;
 }
 
 .player-container .profile-picture{
@@ -230,14 +247,15 @@ body{
 
 .base{
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
+    /* min-height: fill-available; */
     min-height: 100vh;
 }
 
-/* Background */
+/*============ Background ============*/
 
 .base > .background{
-    display: none;
+    /* display: none; */
     position: absolute;
     overflow: hidden;
     height: 100%;
@@ -249,11 +267,13 @@ body{
     position: absolute;
     background-color: rgba(255, 255, 255, 0.596);
     border-radius: 50%;
-    filter: blur(4px);
+    filter: var(--blur);
 }
 
 /*============ Responsive ============*/
 
 @media screen and (min-width:1000px) {
-
+    /* .base > .background{
+        display: block;
+    } */
 }

@@ -13,7 +13,7 @@ const nicknameInput = document.getElementById('nickname');
 //Events
 
 playButton.addEventListener('click', startGame);
-profilePictureInput.addEventListener('change',upload);
+profilePictureInput.addEventListener('change',setupUserProfilePicture);
 profilePicture.addEventListener('click', () => {
     profilePictureInput.click();
 });
@@ -23,30 +23,27 @@ profilePicture.addEventListener('click', () => {
 function startGame(event){
     if (playForm.checkValidity()){
         event.preventDefault();
-        postJson('/api/start',{creatorToken : userToken},(res)=>{
+        let nick = nicknameInput.value;
+        postJson('/api/start',{creatorToken : userToken,room_name:`Partie de ${nick}`},(res)=>{
             if (res.errorCode) return;
-            playerProfile.nickname = nicknameInput.value;
+            playerProfile.nickname = nick;
             savePlayerProfile();
             window.location.replace(`/${res.partyCode}`);
         });
     }
 }
 
-function upload(){
-    if (this.files.length != 0){
-        const imageUrl = URL.createObjectURL(this.files[0]);
-        setupUserPictureFromUrl(imageUrl);
-    }
-}
-
 //Set Profile Image
 
-function setupUserPictureFromUrl(url) {
-    compress_image(url,(picture)=>{
-      playerProfile.picture = picture;
-      savePlayerProfile();
-      profilePicture.style.backgroundImage = `url(data:image/jpeg;base64,${picture})`;
-    })
+function setupUserProfilePicture() {
+    if (this.files.length != 0){
+        const imageUrl = URL.createObjectURL(this.files[0]);
+        compress_image(imageUrl,(picture)=>{
+            playerProfile.picture = picture;
+            savePlayerProfile();
+            profilePicture.style.backgroundImage = `url(data:image/jpeg;base64,${picture})`;
+        });
+    }
 }
 
 //Load profile picture if existing
