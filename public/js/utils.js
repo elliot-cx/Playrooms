@@ -90,3 +90,5 @@ function compress_image(url, callback) {
     return;
   }
 }
+
+// detect user change tab
