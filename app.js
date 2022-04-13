@@ -30,6 +30,7 @@ for(var i = 0, len = cpus.length; i < len; i++) {
         console.log("\t", type, Math.round(100 * cpu.times[type] / total));
     }
 }
+console.log(os.cpus());
 console.log(os.totalmem());
 console.log(os.freemem())
 
