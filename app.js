@@ -172,12 +172,12 @@ io.on('connection',(socket) => {
         
     });
 
-    socket.on('ban',(room_id,user_token,player_id,callback)=>{
-        const room = lobby.get_room(room_id);
+    socket.on('ban',(data,callback)=>{
+        const room = lobby.get_room(data.room_id);
         if (room) {
-            if (room.players_auth[user_token].role == 'host') {
-                if(lobby.ban_player(room,player_id)){
-                    io.to(room.id).emit('ban',player_id);
+            if (room.players_auth[data.user_token].role == 'host') {
+                if(lobby.ban_player(room,data.player_id)){
+                    io.to(room.id).emit('ban',data.player_id);
                     callback();
                 }
             } else {
