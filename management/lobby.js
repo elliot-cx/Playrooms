@@ -59,10 +59,9 @@ module.exports = {
             for(const [player_token, data] of Object.entries(room.players_auth)){
                 if (data.id == player_id) {
                     room.players_auth[player_token].role = 'banned';
-                    break;
+                    return true;
                 }
             }
-            return true
         }
         return false
     }
