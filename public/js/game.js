@@ -50,7 +50,7 @@ function display_error(message){
 
 function JoinRoom() {
     console.log('Conneting to Playrooms servers... 🔌');
-    socket = io({ reconnection: false, transports: ["websocket"] });
+    socket = io({ reconnection: false}); //, transports: ["websocket"] 
     let joinData = {
         room_code: room_code,
         user_token: userToken,
