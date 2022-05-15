@@ -5,6 +5,15 @@ body > .base{
     align-items: center;
 }
 
+/* Loading page */
+
+.loading.page{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
 /* profile page */
 
 .profile.page .top{
@@ -72,17 +81,22 @@ body > .base{
     overflow: visible;   
 }
 
-.lobby.page .players-container p{
+.lobby.page .players-container .scrollable p{
     font-size: var(--bigger-font-size);
 }
 
-.lobby.page .players-container p.offline{
+.lobby.page .players-container .scrollable p.offline{
     font-style: italic;
 }
 
 .lobby.page .players-container .scrollable{
     height: 100%;
     border-radius: 10px;
+}
+
+.lobby.page .players-container > p {
+    text-align: center;
+    padding-top: 0.7rem;
 }
 
 /* Error Page */

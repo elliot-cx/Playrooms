@@ -23,22 +23,24 @@ const nickname_input = document.getElementById('nickname');
 const lobby_players_container = lobby_page.querySelector('.players-container');
 const lobby_title = lobby_players_container.querySelector('h2');
 const lobby_players_wrapper = lobby_players_container.querySelector('div');
+const lobby_waiting_host_label = lobby_players_container.querySelector('p');
+const lobby_start_button = document.getElementById('start');
 
 //global variables
 
 // const game_url = location.href;
 var room_code = location.href.split("/")[3];
 var socket = null;
+var my_player_id;
 var players;
-var players_by_id = {};
 
 //Global Functions
 
 function show_page(page,back=true) {
     lobby_page.setAttribute('hidden',null);
-    // loading_page.setAttribute('hidden',null);
+    loading_page.setAttribute('hidden',null);
     profile_page.setAttribute('hidden',null);
-    if (back == false){background_page.setAttribute('hidden',null);}
+    if (!back){background_page.setAttribute('hidden',null);}
     page.removeAttribute('hidden');
 }
 
@@ -50,7 +52,9 @@ function display_error(message){
 
 function JoinRoom() {
     console.log('Conneting to Playrooms servers... 🔌');
+    show_page(loading_page);
     socket = io({ reconnection: false}); //, transports: ["websocket"] 
+
     let joinData = {
         room_code: room_code,
         user_token: userToken,
@@ -67,25 +71,32 @@ function JoinRoom() {
     socket.on('update_player',update_player);
     socket.on('add_player',add_player);
     socket.on('remove_player',remove_player);
+    socket.on('ban_player',ban_player);
 }
 
-function onJoinSuccess(data){
+function onJoinSuccess(room_data,player_id){
     console.log('Connected successfuly ! ✅');
+
+    my_player_id = player_id;
+
     // traitement des données de la salle
 
-    room_code = data.id;
+    room_code = room_data.id;
 
     //récupère la liste des joueurs
-    players = data.players;
+    players = room_data.players;
 
-    console.log(data);
+    // console.log(room_data);
 
-    lobby_players_container.querySelector('h2').innerText = data.name;
+    lobby_players_container.querySelector('h2').innerText = room_data.name;
     //on regarde le status de la partie 
-    switch (data.state) {
+    switch (room_data.state) {
         case 'lobby':
             show_page(lobby_page);
             render_lobby();
+            break;
+        case 'playing':
+            show_page(game_page);
             break;
         default:
             break;
@@ -109,6 +120,11 @@ function remove_player(player_id) {
     render_lobby();
 }
 
+function ban_player(player_id) {
+    delete players[player_id];
+    render_lobby();
+}
+
 function disconnect(reason) {
     console.log('You have been disconnected ! ⚠️');
     if (socket != null) {
@@ -128,6 +144,9 @@ function disconnect(reason) {
             break;
         case 'banned':
             message = "Tu as été banni de cette salle !";
+            break;
+        case 'authError':
+            message = "Vous n'avez pas les permissions requises !"
             break;
     }
     display_error(message);
@@ -199,7 +218,21 @@ function render_lobby() {
         player_nick.textContent = player.nickname;
         player_div.appendChild(player_nick);
     }
-    // players.forEach(player => {
-        
-    // });
+
+    let nb_players = Object.keys(players).length;
+
+    if (players[my_player_id].role == 'host') {
+        lobby_start_button.removeAttribute('hidden');
+        lobby_waiting_host_label.setAttribute('hidden','true');
+    }
+
+    if (nb_players > 3) {
+        lobby_start_button.removeAttribute('disabled');
+        lobby_start_button.innerText = "Démarrer la partie";
+        lobby_waiting_host_label.innerText = "En attente de l'hôte...";
+    }else{
+        lobby_start_button.setAttribute('disabled','true');
+        lobby_start_button.innerText = `${4- nb_players} joueurs manquant(s)`;
+        lobby_waiting_host_label.innerText = `${4- nb_players} joueurs manquant(s)`;
+    }     
 }

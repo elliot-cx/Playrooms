@@ -1,3 +1,4 @@
+const os = require('os');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -57,13 +58,18 @@ app.get('*',(req,res)=>{
 
 server.listen(port,()=>{ 
     console.log('Server is now running...');
+    setInterval(() => {
+        console.clear();
+        const used = process.memoryUsage().heapUsed / 1024 / 1024;
+        console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
+        console.log(`ram free : ${os.freemem() /1024 /1024} MB`);
+    }, 10000);
 });
 
 //sockets events
 
 io.on('connection',(socket) => {
 
-    // console.log("New User Connected");
     // console.log(io.engine.clientsCount);
 
     // lors de la tentative de connexion à une room
@@ -96,30 +102,35 @@ io.on('connection',(socket) => {
                     // détecter si le joueur est déjà connecté
                     let player = room.players[player_id];
 
-                    if (player.online) {
-                        // on ferme le client
-                        socket.emit('close','alreadyConnected');
+                    if (player) {
+                        if (player.online) {
+                            // on ferme le client
+                            socket.emit('close','alreadyConnected');
+                        }else{
+    
+                            // TODO : Vérification de si le joueur a été expulsé pour inactivité de +30s
+                            lobby.check_timeout(room,player_id);
+    
+                            player.online = true;
+                            player_auth.socket_id = socket.id;
+                            io.to(room.id).emit('update_player',player);
+    
+                            // rejoindre la room
+                            
+                            socket.join(room.id);
+    
+                            // renvoi des données de la salle
+    
+                            callback({
+                                id : room.id,
+                                game_id : room.game_id,
+                                name : room.name,
+                                state : room.state,
+                                players : room.players
+                            },player_id);
+                        }   
                     }else{
 
-                        // TODO : Vérification de si le joueur a été expulsé pour inactivité de +30s
-
-                        player.online = true;
-                        player_auth.socket_id = socket.id;
-                        io.to(room.id).emit('update_player',player);
-
-                        // rejoindre la room
-                        
-                        socket.join(room.id);
-
-                        // renvoi des données de la salle
-
-                        callback({
-                            id : room.id,
-                            game_id : room.game_id,
-                            name : room.name,
-                            state : room.state,
-                            players : room.players
-                        });
                     }
                 }
             }else{
@@ -129,9 +140,12 @@ io.on('connection',(socket) => {
                 player_id = Object.keys(room.players_auth).length;
 
                 // detecter si le joueur a un role spécial
+
+                //TODO : Vérification host
                 if (room.players) {
                     
                 }
+
                 let role = (player_id == 0) ? 'host' : null;
 
                 // création du joueur
@@ -147,17 +161,17 @@ io.on('connection',(socket) => {
                 if(lobby.add_player(room,player,player_token,socket.id,role)){
 
                     socket.join(room.id);
-
+                    
                     callback({
                         id : room.id,
                         game_id : room.game_id,
                         name : room.name,
                         state : room.state,
                         players : room.players
-                    });
+                    },player_id);    
 
-                    // On notifi les autres clients
-                    socket.broadcast.to(room.id).emit('add_player',player);
+                    // On notifie les autres clients
+                    socket.to(room.id).emit('add_player',player);
                 }
 
                 // si l'ajout du joueur échoue ?
@@ -168,22 +182,36 @@ io.on('connection',(socket) => {
         }
     });
 
-    socket.on('',()=>{
-        
+    socket.on('start',(user_token,room_id)=>{
+        //start a game
+        let room = lobby.get_room(room_id); 
+
+        if (room) {
+            if (room.player_auth[user_token].role == 'host'){
+                room.state = 'playing';
+                setTimeout(() => {
+                    io.to(room.id).emit('start');
+                }, 3000);
+            }else{
+                socket.emit('close','authError');
+            }
+        } else {
+            
+        }
+       
     });
 
-    socket.on('ban',(data,callback)=>{
+    socket.on('ban',(data)=>{
         const room = lobby.get_room(data.room_id);
         if (room) {
             if (room.players_auth[data.user_token].role == 'host') {
-                if(lobby.ban_player(room,data.player_id)){
-                    io.to(room.id).emit('ban',data.player_id);
-                    callback();
+                banned_player = lobby.ban_player(room,data.player_id);
+                if(banned_player){
+                    io.to(room.id).emit('ban_player',data.player_id);
+                    io.to(banned_player).emit('close','banned');
                 }
             } else {
-                callback({
-                    auth_error
-                });
+                socket.emit('close','authError');
             }
         }else{
             // ne devrait pas arriver
@@ -206,15 +234,16 @@ io.on('connection',(socket) => {
                     player.online = false;
                     io.to(room.id).emit('update_player',player);
 
-                    // Temps alloué avant la suppression du joueur
-                    setTimeout(() => {
-                        if (player.online == false) {
+                    //Gérer le kickout
+
+                    lobby.set_timeout(room,player.id,()=>{
+                        if (Object.keys(room.players).length == 1) {
+                            lobby.delete(room);
+                        }else{
                             lobby.remove_player(room,player.id);
                             io.to(room.id).emit('remove_player',player.id);
-
-                            // TODO : Vérifier le dernier joueur pour fermer la salle
-                        } 
-                    }, 30000);
+                        }
+                    });
                     break;
                 }
             }

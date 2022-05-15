@@ -1,7 +1,5 @@
 # Question pour des pigeons
 
-[TOC]
-
 ---
 
 ## 1. Prérequis

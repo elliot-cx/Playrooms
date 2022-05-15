@@ -9,6 +9,7 @@ function randomString(len, charSet) {
 }
 
 var rooms = [];
+const players_timeouts = {};
 
 module.exports = {
     create : (host,name) => {
@@ -26,6 +27,13 @@ module.exports = {
         }; 
         rooms.push(room);
         return room;
+    },
+    delete : (room)=>{
+        if(room){
+            rooms = rooms.filter(r => r.id != room.id);
+            return true;
+        }
+        return false;
     },
     get_rooms : () =>{
         return rooms;
@@ -53,16 +61,47 @@ module.exports = {
         }
         return false;
     },
-    ban_player : (room,player_id)=>{
-        if (room){
-            // TODO : Check if player exist
+    get_player_token : (room,player_id)=>{
+        if (room) {
             for(const [player_token, data] of Object.entries(room.players_auth)){
                 if (data.id == player_id) {
-                    room.players_auth[player_token].role = 'banned';
-                    return true;
+                    return player_token;
                 }
             }
         }
-        return false
+        return;
+    },
+    ban_player : (room,player_id)=>{
+        let player_token = module.exports.get_player_token(room,player_id);
+
+        if (player_token){
+            room.players_auth[player_token].role = 'banned';
+            return room.players_auth[player_token].socket_id;
+        }
+        return;
+    },
+    set_timeout : (room,player_id,callback)=>{
+        let player_token = module.exports.get_player_token(room,player_id);
+        if (player_token) {
+            players_timeouts[player_token] = setTimeout(()=>{
+                clearTimeout(players_timeouts[player_token]);
+                delete players_timeouts[player_token];
+                callback();
+            },30000);
+            return;
+        }
+        return;
+    },
+    check_timeout : (room,player_id)=>{
+        let player_token = module.exports.get_player_token(room,player_id);
+
+        if(player_token){
+            let timeout = players_timeouts[player_token];
+            if (timeout) {
+                clearTimeout(timeout);
+                delete players_timeouts[player_token];
+            }
+        }
+        return;
     }
 } 

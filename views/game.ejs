@@ -38,7 +38,11 @@
 <body>
     <div class="base">
         <div class="background"></div>
-        <div class="loading page" hidden></div>
+        <div class="loading page" hidden>
+            <div class="box">
+                <h2>Chargement...</h2>
+            </div>
+        </div>
         <div class="error page" hidden>
             <div class="box">
                 <h2>Déconnexion</h2>
@@ -52,7 +56,8 @@
             <div class="players-container box">
                 <h2>Partie de Nickname</h2>
                 <div class="scrollable"></div>
-                <button id="start" disabled>Démarrer la partie</button>
+                <p>En attente de l'hôte...</p>
+                <button id="start"disabled hidden>Démarrer la partie</button>
             </div>
         </div>
         <div class="profile page" hidden>

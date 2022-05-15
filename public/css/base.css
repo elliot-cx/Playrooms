@@ -21,7 +21,7 @@
     --title-font: 'Courgette', cursive;
     --main-font: 'Fredoka', sans-serif;
     --biggest-font-size: 2.5rem;
-    --h2-font-size:1.75rem;
+    --h2-font-size:1.5rem;
     --h3-font-size:1rem;
     --bigger-font-size:1.25rem;
     --normal-font-size:1rem;
@@ -44,7 +44,7 @@
 @media screen and (min-width:1000px) {
     :root{
         --biggest-font-size: 4rem;
-        --h2-font-size:2.5rem;
+        --h2-font-size:2rem;
         --h3-font-size:1.75rem;
         --bigger-font-size:1.5rem;
         --normal-font-size:1.25rem;
