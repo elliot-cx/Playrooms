@@ -23,16 +23,60 @@ const nickname_input = document.getElementById('nickname');
 const lobby_players_container = lobby_page.querySelector('.players-container');
 const lobby_title = lobby_players_container.querySelector('h2');
 const lobby_players_wrapper = lobby_players_container.querySelector('div');
-const lobby_waiting_host_label = lobby_players_container.querySelector('p');
+const lobby_waiting_host_label = lobby_players_container.querySelector('p.game-status');
 const lobby_start_button = document.getElementById('start');
+
+lobby_start_button.addEventListener('click',()=>{
+    socket.emit('start',userToken,room_code);
+    lobby_start_button.setAttribute('disabled',true);
+});
+
+// Game Dom
+
+const game_page_countdown = document.getElementById('countdown');
+const game_page_countdown_number = game_page_countdown.querySelector('div');
+const game_page_countdown_svg = game_page_countdown.querySelector('svg');
+const game_page_countdown_svg_circle = game_page_countdown_svg.querySelector('circle');
+
+const game_wait_view = game_page.querySelector(".wait-view");
+const game_teams_view = game_page.querySelector(".teams-view");
+const game_questions_view = game_page.querySelector(".questions-view");
+const game_vote_view = game_page.querySelector(".vote-view");
+const game_challenges_view = game_page.querySelector(".challenges-view");
+const game_end_view = game_page.querySelector(".end-view");
+
+const game_team_containers = game_teams_view.getElementsByClassName("team-container");
+
+const game_questions_challenge_card = game_questions_view.querySelector('div.challenge-card');
+const game_questions_challenge_card_question = game_questions_challenge_card.querySelector(".card-question");
+const game_questions_challenge_card_answer = game_questions_challenge_card.querySelector(".card-answer");
+const game_questions_challenge_answer_input = document.getElementById('challenge-answer');
+const game_questions_challenge_valid_btn = document.getElementById('btn-valid-challenge');
+
+game_questions_challenge_card.onclick = () => {game_questions_challenge_card.classList.toggle("flipped")};
+game_questions_challenge_valid_btn.onclick = () => {
+    if (game_questions_challenge_answer_input.value.length > 2) {
+        socket.emit('game_data',userToken,room_code,game_questions_challenge_answer_input.value,() =>{
+            game_questions_challenge_valid_btn.setAttribute('disabled',true);
+            game_questions_challenge_answer_input.setAttribute('disabled',true);
+        });
+    }
+}
+game_questions_challenge_answer_input.onkeyup = (e) =>{
+    e.preventDefault();
+    if (e.keyCode === 13) {
+        game_questions_challenge_valid_btn.click();
+    }
+}
 
 //global variables
 
 // const game_url = location.href;
-var room_code = location.href.split("/")[3];
+var room_code = location.href.split("/")[3].toUpperCase();
 var socket = null;
 var my_player_id;
 var players;
+var current_game_view;
 
 //Global Functions
 
@@ -45,10 +89,10 @@ function show_page(page,back=true) {
 }
 
 function display_error(message){
+    loading_page.setAttribute('hidden',null);
     error_page_message.innerText = message;
     error_page.removeAttribute('hidden');
 }
-
 
 function JoinRoom() {
     console.log('Conneting to Playrooms servers... 🔌');
@@ -64,14 +108,21 @@ function JoinRoom() {
 
     socket.emit('joinRoom',joinData,onJoinSuccess);
 
+    //client event
+
     socket.on('disconnect',disconnect);
-    socket.on('connect_error',(error) => { disconnect(`Tu as été déconnecté, code erreur : ${error.message}`)});
+    socket.on('connect_error',(error) => { disconnect(`Tu as été déconnecté, code erreur : ${error.message}`);});
     socket.on('close',disconnect);
+
+    //players events
 
     socket.on('update_player',update_player);
     socket.on('add_player',add_player);
     socket.on('remove_player',remove_player);
     socket.on('ban_player',ban_player);
+
+    //game events
+    socket.on('game_update',game_update);
 }
 
 function onJoinSuccess(room_data,player_id){
@@ -103,7 +154,7 @@ function onJoinSuccess(room_data,player_id){
     }
 }
 
-// TODO : notification des joueurs
+// TODO : notification des joueurs + support in game
 
 function update_player(player) {
     players[player.id] = player;
@@ -226,13 +277,217 @@ function render_lobby() {
         lobby_waiting_host_label.setAttribute('hidden','true');
     }
 
-    if (nb_players > 3) {
+    if (nb_players > 1) {
         lobby_start_button.removeAttribute('disabled');
         lobby_start_button.innerText = "Démarrer la partie";
         lobby_waiting_host_label.innerText = "En attente de l'hôte...";
     }else{
         lobby_start_button.setAttribute('disabled','true');
-        lobby_start_button.innerText = `${4- nb_players} joueurs manquant(s)`;
-        lobby_waiting_host_label.innerText = `${4- nb_players} joueurs manquant(s)`;
-    }     
+        lobby_start_button.innerText = `${4- nb_players} joueur(s) manquant(s)`;
+        lobby_waiting_host_label.innerText = `${4- nb_players} joueur(s) manquant(s)`;
+    }
+    
+    
 }
+
+
+//Game page
+
+function show_countdown(start,end,callback) {
+    const total_time = (end - start) / 1000;
+    let pourcentage = 0
+    let countdown = total_time;
+    game_page_countdown.removeAttribute('hidden');
+    let interval = setInterval(() => {
+        if (countdown == 0) {
+            clearInterval(interval);
+            game_page_countdown.setAttribute('hidden',null);
+            if(callback){callback();}
+            return;
+        }
+        game_page_countdown_number.innerText = countdown;
+        pourcentage = Math.floor((countdown/total_time)*100);  
+        game_page_countdown_svg_circle.style.strokeDashoffset = `${113-Math.floor((pourcentage/100)*113)}px`;
+        countdown--;
+    }, 1000);
+}
+
+function switch_game_view(game_view) {
+    if (current_game_view == null || current_game_view != game_view) {
+        current_game_view = game_view;
+        game_wait_view.setAttribute('hidden',null);
+        game_teams_view.setAttribute('hidden',null);
+        game_questions_view.setAttribute('hidden',null);
+        game_challenges_view.setAttribute('hidden',null);
+        game_end_view.setAttribute('hidden',null);
+        game_view.removeAttribute('hidden');
+    }
+}
+
+function game_update(game_data) {
+    switch (game_data.state) {
+        case 'teams':
+            console.log('Game started ! 🕹️');
+            // game_teams_view.querySelector('.versus-wrapper h2').removeAttribute('hidden');
+            show_page(game_page);
+
+            for (let index = 0; index < game_data.teams.length; index++) {
+                const team_players = game_data.teams[index];
+                game_team_containers[index].innerHTML = "";
+                for(const player_id of team_players){
+                    let player = players[player_id];
+                    if (player) {
+                        let player_div = document.createElement('div');
+                        player_div.classList.add('player-container');
+                        game_team_containers[index].appendChild(player_div);
+                        let player_profile_pic = document.createElement('div');
+                        player_profile_pic.classList.add('profile-picture');
+                        if (player.picture != null) player_profile_pic.style.backgroundImage = `url(data:image/jpeg;base64,${player.picture})`;
+                        player_div.appendChild(player_profile_pic);
+                        let player_nick = document.createElement('p');
+                        player_nick.textContent = player.nickname;
+                        player_div.appendChild(player_nick);
+                    }
+                }
+            }
+            switch_game_view(game_teams_view);
+            let teams_animation = anime.timeline().add({
+                targets: game_team_containers[0].getElementsByClassName('player-container'),
+                scale: [14,1],
+                opacity: [0,1],
+                easing: "easeOutCirc",
+                duration: 500,
+                delay: (el, i) => 500 * i
+            }).add({
+                targets: '.versus-wrapper h2',
+                background: 'rgba(0, 0, 0, 0)',
+                scale: [14,1],
+                opacity: [0,1],
+                easing: "easeOutCirc",
+                duration: 2000
+            }).add({
+                targets: game_team_containers[1].getElementsByClassName('player-container'),
+                scale: [14,1],
+                opacity: [0,1],
+                easing: "easeOutCirc",
+                zIndex:-1,
+                duration: 500,
+                delay: (el, i) => 500 * i
+            });
+
+            anime({
+                targets: game_teams_view.querySelector(".start-wrapper h3"),
+                easing: 'easeInQuint',
+                duration:5000,
+                opacity: [0.0,1.0]
+            });
+
+            let dots_anime = anime.timeline({loop:true}).add({
+                targets: game_teams_view.querySelectorAll(".start-wrapper h3 span"),
+                easing: 'easeInQuint',
+                direction: 'alternate',
+                translateY: [0, "-0.3em"],
+                zIndex:-3,
+                duration:300,
+                delay: (el, i) => 100 * i,
+            }).add({
+                targets: game_teams_view.querySelectorAll(".start-wrapper h3 span"),
+                easing: 'easeInQuad',
+                direction: 'alternate',
+                translateY: ["-0.3em", 0],
+                zIndex:-3,
+                duration:300,
+                delay: (el, i) => 100 * i,
+            });
+
+            setTimeout(() => {
+                dots_anime.pause();
+                teams_animation.pause();
+                // game_teams_view.querySelector('.versus-wrapper h2').setAttribute('hidden',null);
+                anime({
+                    targets: game_teams_view.querySelector(".start-wrapper h3"),
+                    easing: 'easeOutCubic',
+                    duration:100,
+                    opacity: [1.0,0]
+                });
+                anime({
+                    targets: '.versus-wrapper h2',
+                    scale: [1,50],
+                    zIndex:3,
+                    background: 'linear-gradient(120deg, var(--first-color) 0%, var(--second-color) 100%)',
+                    color: 'rgba(0, 0, 0, 0)',
+                    borderRadius: '50%',
+                    easing: "easeOutCirc",
+                    duration: 2500,
+                });
+                // }).add({
+                //     targets: '.versus-wrapper h2',
+                //     opacity:[1.0,0.0],
+                //     easing: "easeOutCubic",
+                //     duration: 100,
+                // });
+            }, 15000);
+            break;
+        case 'questions':
+            switch_game_view(game_questions_view);
+            game_questions_challenge_valid_btn.removeAttribute('disabled');
+            game_questions_challenge_answer_input.removeAttribute('disabled');
+            anime({
+                targets:game_questions_view,
+                opacity: [0.0,1.0],
+                easing: 'easeInQuad',
+                duration:1000,
+                complete: function() {
+                    game_questions_challenge_card.classList.toggle('flipped');
+                }
+            });
+            game_questions_challenge_card_question.innerText = game_data.team_data.challenge[0];
+            // TODO : Mode de jeux avec réponse cachée
+            if (game_data.team_data.challenge[1] != '') {
+                game_questions_challenge_card_answer.removeAttribute('hidden');
+                game_questions_challenge_card_answer.innerText = game_data.team_data.challenge[1];
+            }else{
+                game_questions_challenge_card_answer.setAttribute('hidden',true);
+            }
+            
+
+            show_countdown(game_data.next_step_time_start,game_data.next_step_time,()=>{
+                if (!game_questions_challenge_valid_btn.disabled) {
+                    socket.emit('game_data',userToken,room_code,game_questions_challenge_answer_input.value,() =>{
+                        game_questions_challenge_valid_btn.setAttribute('disabled',true);
+                        game_questions_challenge_answer_input.setAttribute('disabled',true);
+                    });
+                }
+            });
+
+            break;
+        case 'vote':
+            game_questions_challenge_card.classList.remove("flipped");
+            if (game_data.team_data) {
+                if (current_game_view != game_vote_view) {
+                    
+                    switch_game_view(game_vote_view);
+                }else{
+                    
+                }
+                
+            }else{
+                
+                switch_game_view(game_wait_view);
+            }
+            show_countdown(game_data.next_step_time_start,game_data.next_step_time);
+        case 'challenge':
+            break;
+        default:
+            break;
+    }
+    console.log(game_data);
+}
+
+// document.addEventListener("visibilitychange", (event) => {
+//     if (document.visibilityState == "visible") {
+//       console.log("tab is active")
+//     } else {
+//       console.log("tab is inactive")
+//     }
+//   });

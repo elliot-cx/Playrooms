@@ -1,4 +1,26 @@
-/*=========== Google Fonts ==========*/
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon"> -->
+    <meta property="og:title" content="Playrooms : Maintenance en cours">
+    <title>Playrooms</title>
+</head>
+<body>
+    <div class="base">
+        <div class="maintenance page">
+            <div class="box">
+                <h2>Maintenance</h2>
+                <p>Le site est en maintenance,<br>pour plus d'information :</p>
+                <a href="">Lien vers le discord</a>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    /*=========== Google Fonts ==========*/
 
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Fredoka:wght@300;400;500&display=swap');
 
@@ -22,7 +44,7 @@
     --main-font: 'Fredoka', sans-serif;
     --biggest-font-size: 2.5rem;
     --h2-font-size:1.5rem;
-    --h3-font-size:1.25rem;
+    --h3-font-size:1rem;
     --bigger-font-size:1.25rem;
     --normal-font-size:1rem;
     --small-font-size:0.25rem;
@@ -141,10 +163,6 @@ input:focus{
     box-shadow: var(--shadow-box);
 }
 
-input:disabled{
-    background-color: rgba(220, 220, 220, 0.825);
-}
-
 button{
     color: var(--text-color);
     padding: 0.7rem;
@@ -194,6 +212,7 @@ button:disabled{
     box-shadow: var(--shadow-box);
     background-size: cover;
     background-image: url("/img/avatars/guest.jpg");
+    
 }
 
 .profile-picture.upload::before{ 
@@ -235,35 +254,6 @@ button:disabled{
     margin-right: 1rem;
 }
 
-#countdown{
-    position: absolute;
-    right: 3rem;
-    top: 5rem;
-}
-
-#countdown > div{
-    position: absolute;
-    height: 40px;
-    width: 40px;
-    text-align: center;
-    line-height: 2.5rem;
-}
-
-#countdown > svg{
-    width: 40px;
-    height: 40px;
-    transform: rotateY(-180deg) rotateZ(-90deg);
-}
-
-#countdown > svg > circle{
-    stroke-dasharray: 113px;
-    stroke-dashoffset: 0px;
-    stroke-linecap: round;
-    stroke-width: 2px;
-    stroke: white;
-    fill: none;
-}
-
 /*============ Dom ============*/    
 
 body{
@@ -285,6 +275,19 @@ body{
     /* min-height: fill-available; */
     min-height: 100vh;
 }
+
+.maintenance{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.maintenance h2{
+    margin-bottom: 0.5rem;
+}
+
 
 /*============ Background ============*/
 
@@ -310,7 +313,5 @@ body{
     /* .base > .background{
         display: block;
     } */
-    #countdown{
-        top: auto;
-    }
 }
+</style>

@@ -7,6 +7,7 @@ const io = require('socket.io')(server);
 const path = require('path');
 
 const lobby = require('./management/lobby');
+const game = require('./management/game')(io);
 
 app.use('/animejs', express.static(path.join(__dirname, 'node_modules/animejs/lib')));
 // howler.js
@@ -58,12 +59,12 @@ app.get('*',(req,res)=>{
 
 server.listen(port,()=>{ 
     console.log('Server is now running...');
-    setInterval(() => {
-        console.clear();
-        const used = process.memoryUsage().heapUsed / 1024 / 1024;
-        console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
-        console.log(`ram free : ${os.freemem() /1024 /1024} MB`);
-    }, 10000);
+    // setInterval(() => {
+    //     console.clear();
+    //     const used = process.memoryUsage().heapUsed / 1024 / 1024;
+    //     console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
+    //     console.log(`ram free : ${os.freemem() /1024 /1024} MB`);
+    // }, 10000);
 });
 
 //sockets events
@@ -130,7 +131,30 @@ io.on('connection',(socket) => {
                             },player_id);
                         }   
                     }else{
-
+                        let player = {
+                            id : player_id,
+                            online : true,
+                            nickname : joinData.player_settings.nickname,
+                            picture : joinData.player_settings.picture,
+                            role : null
+                        }
+        
+                        // ajout du joueur dans la salle
+                        if(lobby.add_player(room,player,player_token,socket.id,null)){
+        
+                            socket.join(room.id);
+                            
+                            callback({
+                                id : room.id,
+                                game_id : room.game_id,
+                                name : room.name,
+                                state : room.state,
+                                players : room.players
+                            },player_id);    
+        
+                            // On notifie les autres clients
+                            socket.to(room.id).emit('add_player',player);
+                        }
                     }
                 }
             }else{
@@ -142,7 +166,7 @@ io.on('connection',(socket) => {
                 // detecter si le joueur a un role spécial
 
                 //TODO : Vérification host
-                if (room.players) {
+                if (room.players[player_id]) {
                     
                 }
 
@@ -186,29 +210,42 @@ io.on('connection',(socket) => {
         //start a game
         let room = lobby.get_room(room_id); 
 
-        if (room) {
-            if (room.player_auth[user_token].role == 'host'){
-                room.state = 'playing';
-                setTimeout(() => {
-                    io.to(room.id).emit('start');
-                }, 3000);
+        if (room && room.players_auth[user_token]) {
+            if (room.players_auth[user_token].role == 'host'){
+                if (room.state == 'lobby') {
+                    if (Object.keys(room.players).length > 1) {
+                        room.state = 'playing';
+                        game.start(room);
+                    }
+                    return;
+                }
             }else{
                 socket.emit('close','authError');
             }
         } else {
-            
+            socket.emit('close','noSuchRoom');
         }
        
+    });
+
+    socket.on('game_data',(player_token,room_id,data,callback)=>{
+        let room = lobby.get_room(room_id);
+        if (room) {
+            game.update_player(player_token,room,data,callback);
+        }else{
+            socket.emit('close','noSuchRoom');
+        }
     });
 
     socket.on('ban',(data)=>{
         const room = lobby.get_room(data.room_id);
         if (room) {
             if (room.players_auth[data.user_token].role == 'host') {
-                banned_player = lobby.ban_player(room,data.player_id);
-                if(banned_player){
-                    io.to(room.id).emit('ban_player',data.player_id);
+                lobby.ban_player(room,data.player_id);
+                banned_player_socket = lobby.get_player_socket(data.player_id); 
+                if(banned_player_socket){
                     io.to(banned_player).emit('close','banned');
+                    io.to(room.id).except(banned_player).emit('ban_player',data.player_id);
                 }
             } else {
                 socket.emit('close','authError');
@@ -236,8 +273,13 @@ io.on('connection',(socket) => {
 
                     //Gérer le kickout
 
+                    //TODO : vérifier la déconnexion de l'hote
+
                     lobby.set_timeout(room,player.id,()=>{
                         if (Object.keys(room.players).length == 1) {
+                            if (lobby.game_data && lobby.game_data.next_step_timeout) {
+                                clearTimeout(lobby.game_data.next_step_timeout);
+                            }
                             lobby.delete(room);
                         }else{
                             lobby.remove_player(room,player.id);

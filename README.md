@@ -22,3 +22,15 @@ Règles modifiés (non adopté) :
 Idées supplémentaires : 
 
 * Bonus / Malus tout les 2 manches
+
+## 2 . Amélioration
+
+Utiliser des `Namespaces ` pour les lobbys et les `Room` pour le jeu en lui même :
+
+```mermaid
+graph LR;
+	playrooms.fr/ABCD==>Namespace;
+	Namespace-->room1;
+	Namespace-->room2;
+```
+

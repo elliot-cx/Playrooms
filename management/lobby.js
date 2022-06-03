@@ -20,6 +20,7 @@ module.exports = {
         const room = {
             id : id,
             game_id : 'QPJ',
+            game_data : {},
             name : name,
             state : 'lobby',
             players : {},
@@ -71,14 +72,21 @@ module.exports = {
         }
         return;
     },
+    get_player_socket : (room,player_id)=>{
+        if(room){
+            let token = module.exports.get_player_token(room,player_id);
+            if(token){
+                return room.players_auth[token].socket_id;
+            }
+        }
+        return;
+    },
     ban_player : (room,player_id)=>{
         let player_token = module.exports.get_player_token(room,player_id);
 
         if (player_token){
             room.players_auth[player_token].role = 'banned';
-            return room.players_auth[player_token].socket_id;
         }
-        return;
     },
     set_timeout : (room,player_id,callback)=>{
         let player_token = module.exports.get_player_token(room,player_id);

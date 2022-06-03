@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/game.css">
     <meta property="og:title" content="Playrooms : Questions pour des pigeons">
-    <meta property="og:description" content="Questions pour des pigeons, jouez en ligne avec vous amis !">
+    <meta property="og:description" content="Jouez en ligne avec vos amis ! Jouable de 4 à 10 joueurs, ce jeu se joue en équipe et demande de la créativité !">
     <meta property="og:image" content="http://playrooms.fr/img/Icon.png">
     <meta property="og:url" content="http://playrooms.fr/">
     <title>Questions pour des pigeons !</title>
@@ -55,8 +55,9 @@
         <div class="lobby page" hidden>
             <div class="players-container box">
                 <h2>Partie de Nickname</h2>
+                <p>1/10 joueurs dans le lobby</p>
                 <div class="scrollable"></div>
-                <p>En attente de l'hôte...</p>
+                <p class="game-status">En attente de l'hôte...</p>
                 <button id="start"disabled hidden>Démarrer la partie</button>
             </div>
         </div>
@@ -95,9 +96,70 @@
         <div class="game page" hidden>
             <div class="top">
                 <h1>Questions pour des <br>Pigeons</h1>
+                <div id="countdown" hidden>
+                    <div>90</div>
+                    <svg>
+                      <circle r="18" cx="20" cy="20"></circle>
+                    </svg>
+                </div>
             </div>
             <div class="main">
-                
+                <div class="wait-view">
+                    <div class="box">
+                        En attente des autres joueurs...
+                    </div>
+                </div>
+                <div class="teams-view" hidden>
+                    <div class="teams-container">
+                        <div class="team-container"></div>
+                        <div class="versus-wrapper">
+                            <h2>VS</h2>
+                        </div>
+                        <div class="team-container"></div>
+                    </div>
+                    <div class="start-wrapper">
+                        <h3>La partie va bientôt commencer<span>.</span><span>.</span><span>.</span></h3>
+                    </div>
+                </div>
+                <div class="questions-view" hidden>
+                    <div class="challenge-container">
+                        <div class="challenge-card">
+                            <div class="card-face front">
+                                <h2>Questions pour des <br>pigeons</h2>
+                            </div>
+                            <div class="card-face back">
+                                <p class="card-question"></p>
+                                <p class="card-answer"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <p>Entre ta réponse :</p>
+                        <input id="challenge-answer" type="text" placeholder="Invente une réponse bidon ou crédible" minlength="2" maxlength="60" autocomplete="on" spellcheck="false">
+                        <button id="btn-valid-challenge">Valider</button>
+                    </div>
+                </div>
+                <div class="vote-view" hidden>
+                    <div class="challenge-container">
+                        <div class="challenge-card">
+                            <div class="card-face front">
+                                <h2>Questions pour des <br>pigeons</h2>
+                            </div>
+                            <div class="card-face back">
+                                <p class="card-question"></p>
+                                <p class="card-answer"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Vote en cliquant sur ta réponse préférée :</p>
+                    <div class="challenges-container"></div>  
+                </div>
+                <div class="challenges-view" hidden>
+                    <div>
+                        A votre tour / Au tour de l'équipe adverse
+                    </div>
+                </div>
+                <div class="end-view" hidden></div>
             </div>
         </div>
     </div>
