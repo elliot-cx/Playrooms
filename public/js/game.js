@@ -21,6 +21,7 @@ const nickname_input = document.getElementById('nickname');
 // Lobby Dom
 
 const lobby_players_container = lobby_page.querySelector('.players-container');
+const lobby_players_counter = lobby_page.querySelector('p.players-counter');
 const lobby_title = lobby_players_container.querySelector('h2');
 const lobby_players_wrapper = lobby_players_container.querySelector('div');
 const lobby_waiting_host_label = lobby_players_container.querySelector('p.game-status');
@@ -68,6 +69,11 @@ game_questions_challenge_answer_input.onkeyup = (e) =>{
         game_questions_challenge_valid_btn.click();
     }
 }
+
+const game_vote_challenge_card = game_vote_view.querySelector('div.challenge-card');
+const game_vote_challenge_card_question = game_questions_challenge_card.querySelector(".card-question");
+const game_vote_challenge_card_answer = game_questions_challenge_card.querySelector(".card-answer");
+const game_vote_challenge_answers_container = game_vote_view.querySelector('div.challenges-container'); 
 
 //global variables
 
@@ -197,13 +203,18 @@ function disconnect(reason) {
             message = "Tu as été banni de cette salle !";
             break;
         case 'authError':
-            message = "Vous n'avez pas les permissions requises !"
+            message = "Vous n'avez pas les permissions requises !";
+            break;
+        case 'tooManyPlayers':
+            message = "Il y a trop de joueurs dans ce salon !";
             break;
     }
     display_error(message);
 }
 
 // Profile Page Functions
+
+//TODO : Add possibility to modify player name and profile picture
 
 if (playerProfile.nickname != null) {
     JoinRoom();
@@ -272,6 +283,8 @@ function render_lobby() {
 
     let nb_players = Object.keys(players).length;
 
+    lobby_players_counter.innerText = `${nb_players}/10 joueurs dans le lobby`;
+
     if (players[my_player_id].role == 'host') {
         lobby_start_button.removeAttribute('hidden');
         lobby_waiting_host_label.setAttribute('hidden','true');
@@ -283,8 +296,8 @@ function render_lobby() {
         lobby_waiting_host_label.innerText = "En attente de l'hôte...";
     }else{
         lobby_start_button.setAttribute('disabled','true');
-        lobby_start_button.innerText = `${4- nb_players} joueur(s) manquant(s)`;
-        lobby_waiting_host_label.innerText = `${4- nb_players} joueur(s) manquant(s)`;
+        lobby_start_button.innerText = `${4 - nb_players} joueur(s) manquant(s)`;
+        lobby_waiting_host_label.innerText = `${4 - nb_players} joueur(s) manquant(s)`;
     }
     
     
@@ -293,14 +306,23 @@ function render_lobby() {
 
 //Game page
 
+var countdownInterval = null;
+
 function show_countdown(start,end,callback) {
+    if(countdownInterval){clearInterval(countdownInterval);}
     const total_time = (end - start) / 1000;
-    let pourcentage = 0
+    let pourcentage = 100
     let countdown = total_time;
+
+    game_page_countdown_number.innerText = countdown;
+    pourcentage = Math.floor((countdown/total_time)*100);  
+    game_page_countdown_svg_circle.style.strokeDashoffset = `${113-Math.floor((pourcentage/100)*113)}px`;
+
     game_page_countdown.removeAttribute('hidden');
-    let interval = setInterval(() => {
+    countdownInterval = setInterval(() => {
         if (countdown == 0) {
-            clearInterval(interval);
+            clearInterval(countdownInterval);
+            countdownInterval = null
             game_page_countdown.setAttribute('hidden',null);
             if(callback){callback();}
             return;
@@ -318,6 +340,7 @@ function switch_game_view(game_view) {
         game_wait_view.setAttribute('hidden',null);
         game_teams_view.setAttribute('hidden',null);
         game_questions_view.setAttribute('hidden',null);
+        game_vote_view.setAttribute('hidden',null);
         game_challenges_view.setAttribute('hidden',null);
         game_end_view.setAttribute('hidden',null);
         game_view.removeAttribute('hidden');
@@ -459,24 +482,27 @@ function game_update(game_data) {
                     });
                 }
             });
-
             break;
         case 'vote':
-            game_questions_challenge_card.classList.remove("flipped");
+            
             if (game_data.team_data) {
-                if (current_game_view != game_vote_view) {
-                    
-                    switch_game_view(game_vote_view);
-                }else{
-                    
-                }
-                
+                switch_game_view(game_vote_view);
             }else{
-                
                 switch_game_view(game_wait_view);
             }
-            show_countdown(game_data.next_step_time_start,game_data.next_step_time);
+            if(!countdownInterval){
+                show_countdown(game_data.next_step_time_start,game_data.next_step_time);
+            }
+
+            
+            
+
+
+            break;
         case 'challenge':
+            game_questions_challenge_card.classList.remove("flipped");
+            switch_game_view(game_challenges_view);
+            show_countdown(game_data.next_step_time_start,game_data.next_step_time);
             break;
         default:
             break;

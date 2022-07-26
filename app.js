@@ -8,6 +8,7 @@ const path = require('path');
 
 const lobby = require('./management/lobby');
 const game = require('./management/game')(io);
+const analytics = require('./management/analytics');
 
 app.use('/animejs', express.static(path.join(__dirname, 'node_modules/animejs/lib')));
 // howler.js
@@ -18,11 +19,11 @@ app.set('view engine','ejs');
 
 // Routing
 
-app.get('/',(req,res) => {
+app.get('/',(_,res) => {S
     res.render('index');
 });
 
-app.get('/[a-zA-Z]{4}',(req,res)=>{
+app.get('/[a-zA-Z]{4}',(_,res)=>{
     res.render('game');
 });
 
@@ -84,6 +85,8 @@ io.on('connection',(socket) => {
 
             // récupération du token
             let player_token = joinData.user_token;
+
+            // analytics.track('room joined',player_token);
 
             // detecter si le joueur est déjà venu dans la partie
             let player_auth = room.players_auth[player_token];
@@ -154,6 +157,8 @@ io.on('connection',(socket) => {
         
                             // On notifie les autres clients
                             socket.to(room.id).emit('add_player',player);
+                        }else{
+                            socket.emit('close','tooManyPlayers');
                         }
                     }
                 }
@@ -196,9 +201,9 @@ io.on('connection',(socket) => {
 
                     // On notifie les autres clients
                     socket.to(room.id).emit('add_player',player);
+                }else{
+                    socket.emit('close','tooManyPlayers');
                 }
-
-                // si l'ajout du joueur échoue ?
             }
         }else{
             // si la room n'existe pas, fermeture du client
@@ -276,14 +281,11 @@ io.on('connection',(socket) => {
                     //TODO : vérifier la déconnexion de l'hote
 
                     lobby.set_timeout(room,player.id,()=>{
-                        if (Object.keys(room.players).length == 1) {
-                            if (lobby.game_data && lobby.game_data.next_step_timeout) {
-                                clearTimeout(lobby.game_data.next_step_timeout);
-                            }
+                        lobby.remove_player(room,player.id);
+                        io.to(room.id).emit('remove_player',player.id);
+                        if (Object.keys(room.players).length == 0) {
+                            clearTimeout(room.game_data.next_step_timeout);
                             lobby.delete(room);
-                        }else{
-                            lobby.remove_player(room,player.id);
-                            io.to(room.id).emit('remove_player',player.id);
                         }
                     });
                     break;

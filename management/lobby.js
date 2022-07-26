@@ -32,6 +32,7 @@ module.exports = {
     delete : (room)=>{
         if(room){
             rooms = rooms.filter(r => r.id != room.id);
+            delete room;
             return true;
         }
         return false;
@@ -44,10 +45,12 @@ module.exports = {
     },
     add_player : (room,player,user_token,socket_id,player_role=null) =>{
         if (room){
-            room.players[player.id] = player;
-            room.players_auth[user_token] = {id:player.id,socket_id:socket_id,role:player_role};
-            // console.log(room.players_auth);
-            return true;
+            if(Object.keys(room.players).length < 9){
+                room.players[player.id] = player;
+                room.players_auth[user_token] = {id:player.id,socket_id:socket_id,role:player_role};
+                // console.log(room.players_auth);
+                return true;
+            }
         }
         return false;
     },

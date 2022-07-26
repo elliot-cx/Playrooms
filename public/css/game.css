@@ -63,6 +63,9 @@ body > .base{
     -webkit-transform: rotateY(180deg);
 }
 
+/* Anwser Component */
+
+
 /* Error Page */
 
 .error.page{
@@ -313,8 +316,15 @@ body > .base{
     gap:1rem;
 }
 
+/* .challenge-container{
+    perspective: 800px;
+    width: 350px;
+    height: 200px;
+} */
+
 
 @media screen and (min-width:1000px) {
+    
     /* Game Component */
 
     .challenge-container{
@@ -386,7 +396,7 @@ body > .base{
         width: 400px;
     }
 
-    /*  */
+    /* Vote Part */
 
     
 

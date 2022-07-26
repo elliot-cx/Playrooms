@@ -1,5 +1,5 @@
 //initialization
-
+window.history.pushState('Playrooms', null, '/');
 
 //DOM Elements
 
