@@ -1,4 +1,3 @@
-const os = require('os');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,7 +18,7 @@ app.set('view engine','ejs');
 
 // Routing
 
-app.get('/',(_,res) => {S
+app.get('/',(_,res) => {
     res.render('index');
 });
 

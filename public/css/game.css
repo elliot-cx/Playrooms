@@ -48,6 +48,22 @@ body > .base{
     border-radius: 10px;
     padding: 1rem;
 }
+
+.challenge-card.valid > .card-face.back{
+    border: 10px solid rgb(0,255,0);
+    transition: 1s;
+}
+
+.challenge-card.wrong > .card-face.back{
+    border: 10px solid rgb(255,0,0);
+    transition: 1s;
+}
+
+.challenge-card.selected > .card-face.back{
+    border: 10px solid rgb(0,0,255);
+    transition: 1s;
+}
+  
   
 .challenge-card > .card-face.front {
     background: var(--reverse-background-gradient);
@@ -61,6 +77,21 @@ body > .base{
     -moz-transform: rotateY(180deg);
     -o-transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
+}
+
+.challenge-card > .card-face.back > .players{
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    bottom: 0;
+    right: 0;
+    margin: 0.5rem;
+}
+
+.challenge-card > .card-face.back > .players > .profile-picture{
+    min-width: 25px;
+    min-height: 25px;
+    margin-left: 0.5rem;
 }
 
 /* Anwser Component */
@@ -306,22 +337,37 @@ body > .base{
 
 /* Vote part */
 
-.game.page .questions-view{
+.game.page .vote-view{
     height: 100%;
     width: 100%;
     display: flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    gap:1rem;
+    gap:1.5rem;
 }
 
-/* .challenge-container{
+.game.page .vote-view .challenge-container{
     perspective: 800px;
-    width: 350px;
-    height: 200px;
-} */
+    width: 300px;
+    height: 150px;
+    min-width: 300px;
+    min-height: 150px;
+}
 
+.game.page .vote-view .challenges-container{
+    display: flex;
+    flex-flow: column;
+    overflow-y: scroll;
+    gap: 1.5rem;
+    width: 100%;
+    align-items: center;
+}
+@media screen and (min-width:1250px){
+    .challenges-container{
+        width: 80%;
+    }
+}    
 
 @media screen and (min-width:1000px) {
     
@@ -398,6 +444,20 @@ body > .base{
 
     /* Vote Part */
 
+    .game.page .vote-view .challenges-container{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        gap: 1.5rem;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        overflow-y:hidden;
+
+    }    
     
+    .game.page .vote-view .challenge-container h2{
+        font-size: 1.5rem;
+    }
 
 }

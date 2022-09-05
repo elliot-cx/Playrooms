@@ -71,9 +71,9 @@ game_questions_challenge_answer_input.onkeyup = (e) =>{
 }
 
 const game_vote_challenge_card = game_vote_view.querySelector('div.challenge-card');
-const game_vote_challenge_card_question = game_questions_challenge_card.querySelector(".card-question");
-const game_vote_challenge_card_answer = game_questions_challenge_card.querySelector(".card-answer");
-const game_vote_challenge_answers_container = game_vote_view.querySelector('div.challenges-container'); 
+const game_vote_challenge_card_question = game_vote_challenge_card.querySelector(".card-question");
+const game_vote_challenge_card_answer = game_vote_challenge_card.querySelector(".card-answer");
+const game_vote_challenge_answers_container = game_vote_view.querySelector('div.challenges-container');
 
 //global variables
 
@@ -465,6 +465,7 @@ function game_update(game_data) {
                 }
             });
             game_questions_challenge_card_question.innerText = game_data.team_data.challenge[0];
+            
             // TODO : Mode de jeux avec réponse cachée
             if (game_data.team_data.challenge[1] != '') {
                 game_questions_challenge_card_answer.removeAttribute('hidden');
@@ -472,7 +473,6 @@ function game_update(game_data) {
             }else{
                 game_questions_challenge_card_answer.setAttribute('hidden',true);
             }
-            
 
             show_countdown(game_data.next_step_time_start,game_data.next_step_time,()=>{
                 if (!game_questions_challenge_valid_btn.disabled) {
@@ -484,20 +484,48 @@ function game_update(game_data) {
             });
             break;
         case 'vote':
-            
             if (game_data.team_data) {
                 switch_game_view(game_vote_view);
+                game_vote_challenge_card_question.innerText = game_data.team_data.challenge[0];
+                game_vote_challenge_card.classList.remove('flipped');
+
+                if (game_data.team_data.challenge[1] != '') {
+                    game_vote_challenge_card_answer.removeAttribute('hidden');
+                    game_vote_challenge_card_answer.innerText = game_data.team_data.challenge[1];
+                }else{
+                    game_vote_challenge_card_answer.setAttribute('hidden',true);
+                }
+
+                if(game_vote_challenge_answers_container.childElementCount == 0){
+                    for (let index = 0; index < game_data.team_data.challenges.length; index++) {
+                        let challenge_container = document.createElement('div');
+                        challenge_container.className = "challenge-container"
+                        // challenge_container.dataset.id = index;
+                        challenge_container.innerHTML = (
+                        `<div class="challenge-card flipped">
+                            <div class="card-face front">
+                                <h2>Questions pour des <br>pigeons</h2>
+                            </div>
+                            <div class="card-face back">
+                                <!-- <p class="card-question"></p> -->
+                                <p class="card-answer">${game_data.team_data.challenges[index]}</p>
+                                <div class="players"></div>
+                            </div>
+                        </div>`
+                        );
+                        challenge_container.addEventListener('click',()=>{
+                            socket.emit('game_data',userToken,room_code,index);
+                        });
+                        game_vote_challenge_answers_container.appendChild(challenge_container);             
+                    }
+                }
+                
             }else{
                 switch_game_view(game_wait_view);
             }
             if(!countdownInterval){
                 show_countdown(game_data.next_step_time_start,game_data.next_step_time);
             }
-
-            
-            
-
-
             break;
         case 'challenge':
             game_questions_challenge_card.classList.remove("flipped");

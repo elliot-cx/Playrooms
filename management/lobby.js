@@ -45,7 +45,7 @@ module.exports = {
     },
     add_player : (room,player,user_token,socket_id,player_role=null) =>{
         if (room){
-            if(Object.keys(room.players).length < 9){
+            if(Object.keys(room.players).length < 10){
                 room.players[player.id] = player;
                 room.players_auth[user_token] = {id:player.id,socket_id:socket_id,role:player_role};
                 // console.log(room.players_auth);
