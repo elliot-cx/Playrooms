@@ -129,6 +129,7 @@ function JoinRoom() {
 
     //game events
     socket.on('game_update',game_update);
+    socket.on('vote',vote_update)
 }
 
 function onJoinSuccess(room_data,player_id){
@@ -487,7 +488,7 @@ function game_update(game_data) {
             if (game_data.team_data) {
                 switch_game_view(game_vote_view);
                 game_vote_challenge_card_question.innerText = game_data.team_data.challenge[0];
-                game_vote_challenge_card.classList.remove('flipped');
+                // game_vote_challenge_card.classList.remove('flipped');
 
                 if (game_data.team_data.challenge[1] != '') {
                     game_vote_challenge_card_answer.removeAttribute('hidden');
@@ -500,7 +501,7 @@ function game_update(game_data) {
                     for (let index = 0; index < game_data.team_data.challenges.length; index++) {
                         let challenge_container = document.createElement('div');
                         challenge_container.className = "challenge-container"
-                        // challenge_container.dataset.id = index;
+                        challenge_container.dataset.id = index;
                         challenge_container.innerHTML = (
                         `<div class="challenge-card flipped">
                             <div class="card-face front">
@@ -513,10 +514,8 @@ function game_update(game_data) {
                             </div>
                         </div>`
                         );
-                        challenge_container.addEventListener('click',()=>{
-                            socket.emit('game_data',userToken,room_code,index);
-                        });
-                        game_vote_challenge_answers_container.appendChild(challenge_container);             
+                        challenge_container.addEventListener('click',()=>socket.emit('game_data',userToken,room_code,index));
+                        game_vote_challenge_answers_container.appendChild(challenge_container);          
                     }
                 }
                 
@@ -538,6 +537,32 @@ function game_update(game_data) {
     console.log(game_data);
 }
 
+function vote_update(vote_data) {
+    switch (current_game_view) {
+        case game_vote_view:
+            for(const challenge_container of game_vote_challenge_answers_container.children){
+                const challenge_card = challenge_container.querySelector("div.challenge-card");
+                challenge_card.classList.remove('selected');
+                const players_container = challenge_card.querySelector("div.players");
+                players_container.innerHTML = '';
+                for(const[player_id,vote] of Object.entries(vote_data)){
+                    if(challenge_container.dataset.id == vote){
+                        if (player_id == my_player_id) {challenge_card.classList.add('selected');}
+                        const player = players[player_id];
+                        const player_profile_pic = document.createElement('div');
+                        player_profile_pic.classList.add('profile-picture');
+                        player_profile_pic.setAttribute('title',player.nickname);
+                        if (player.picture != null) player_profile_pic.style.backgroundImage = `url(data:image/jpeg;base64,${player.picture})`;
+                        players_container.appendChild(player_profile_pic);
+                    }
+                }
+            }
+            break;
+        default:
+            console.log(current_game_view);
+            break;
+    }
+}
 // document.addEventListener("visibilitychange", (event) => {
 //     if (document.visibilityState == "visible") {
 //       console.log("tab is active")

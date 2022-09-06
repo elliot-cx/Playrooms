@@ -233,7 +233,16 @@ io.on('connection',(socket) => {
     });
 
     socket.on('game_data',(player_token,room_id,data,callback)=>{
-        let room = lobby.get_room(room_id);
+        const room = lobby.get_room(room_id);
+        if (room) {
+            game.update_player(player_token,room,data,callback);
+        }else{
+            socket.emit('close','noSuchRoom');
+        }
+    });
+
+    socket.on('vote',(player_token,room_id,vote,callback)=>{
+        const room = lobby.get_room(room_id);
         if (room) {
             game.update_player(player_token,room,data,callback);
         }else{
