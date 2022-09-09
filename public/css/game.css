@@ -363,6 +363,36 @@ body > .base{
     width: 100%;
     align-items: center;
 }
+
+/* Challenges Part */
+
+.game.page .challenges-view{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    gap:1.5rem;
+}
+
+.game.page .challenges-view .challenge-container{
+    perspective: 800px;
+    width: 300px;
+    height: 150px;
+    min-width: 300px;
+    min-height: 150px;
+}
+
+.game.page .challenges-view .challenges-container{
+    display: flex;
+    flex-flow: column;
+    overflow-y: scroll;
+    gap: 1.5rem;
+    width: 100%;
+    align-items: center;
+}
+
 @media screen and (min-width:1250px){
     .challenges-container{
         width: 80%;
@@ -457,6 +487,23 @@ body > .base{
     }    
     
     .game.page .vote-view .challenge-container h2{
+        font-size: 1.5rem;
+    }
+
+    /* Challenges Part */
+    .game.page .challenges-view .challenges-container{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        gap: 1.5rem;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        overflow-y:hidden;
+
+    }    
+    
+    .game.page .challenges-view .challenge-container h2{
         font-size: 1.5rem;
     }
 

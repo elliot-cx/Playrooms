@@ -75,6 +75,12 @@ const game_vote_challenge_card_question = game_vote_challenge_card.querySelector
 const game_vote_challenge_card_answer = game_vote_challenge_card.querySelector(".card-answer");
 const game_vote_challenge_answers_container = game_vote_view.querySelector('div.challenges-container');
 
+const game_challenges_state = document.getElementById('challenges-state');
+const game_challenges_challenge_card = game_challenges_view.querySelector('div.challenge-card');
+const game_challenges_challenge_card_question = game_challenges_challenge_card.querySelector(".card-question");
+const game_challenges_challenge_card_answer = game_challenges_challenge_card.querySelector(".card-answer");
+const game_challenges_challenge_answers_container = game_challenges_view.querySelector('div.challenges-container');
+
 //global variables
 
 // const game_url = location.href;
@@ -527,9 +533,59 @@ function game_update(game_data) {
             }
             break;
         case 'challenge':
-            game_questions_challenge_card.classList.remove("flipped");
             switch_game_view(game_challenges_view);
             show_countdown(game_data.next_step_time_start,game_data.next_step_time);
+            const my_team = game_data.teams[0].includes(my_player_id.toString()) ? 0 : 1;
+
+            if (game_data.voting_team == my_team) {
+                game_challenges_state.innerText = "C'est à ton équipe de jouer !";    
+            }else{
+                game_challenges_state.innerText = "C'est à l'équipe adverse de jouer !";
+            }
+
+            if (game_data.team_data.challenge[1] != '') {
+                game_challenges_challenge_card_answer.removeAttribute('hidden');
+                game_challenges_challenge_card_answer.innerText = game_data.team_data.challenge[1];
+            }else{
+                game_challenges_challenge_card_answer.setAttribute('hidden',true);
+            }
+            game_challenges_challenge_card_question.innerText = game_data.team_data.challenge[0];
+
+            game_challenges_challenge_card.classList.remove("flipped");
+            anime({
+                targets:game_challenges_view,
+                opacity: [0.0,1.0],
+                easing: 'easeInQuad',
+                duration:1000,
+                complete: function() {
+                    game_challenges_challenge_card.classList.add('flipped');
+                }
+            });
+            // game_challenges_challenge_card.classList.remove('flipped');
+            game_challenges_challenge_answers_container.innerHTML = '';
+            for (let index = 0; index < game_data.team_data.challenges.length; index++) {
+                let challenge_container = document.createElement('div');
+                challenge_container.className = "challenge-container"
+                challenge_container.dataset.id = index;
+                challenge_container.innerHTML = (
+                `<div class="challenge-card flipped">
+                    <div class="card-face front">
+                        <h2>Questions pour des <br>pigeons</h2>
+                    </div>
+                    <div class="card-face back">
+                        <!-- <p class="card-question"></p> -->
+                        <p class="card-answer">${game_data.team_data.challenges[index]}</p>
+                        <div class="players"></div>
+                    </div>
+                </div>`
+                );
+                challenge_container.addEventListener('click',()=>{
+                    //check team
+                    socket.emit('game_data',userToken,room_code,index);
+                });
+                game_challenges_challenge_answers_container.appendChild(challenge_container);        
+            }
+            game_challenges_challenge_card.classList.add('flipped');
             break;
         default:
             break;
@@ -538,29 +594,23 @@ function game_update(game_data) {
 }
 
 function vote_update(vote_data) {
-    switch (current_game_view) {
-        case game_vote_view:
-            for(const challenge_container of game_vote_challenge_answers_container.children){
-                const challenge_card = challenge_container.querySelector("div.challenge-card");
-                challenge_card.classList.remove('selected');
-                const players_container = challenge_card.querySelector("div.players");
-                players_container.innerHTML = '';
-                for(const[player_id,vote] of Object.entries(vote_data)){
-                    if(challenge_container.dataset.id == vote){
-                        if (player_id == my_player_id) {challenge_card.classList.add('selected');}
-                        const player = players[player_id];
-                        const player_profile_pic = document.createElement('div');
-                        player_profile_pic.classList.add('profile-picture');
-                        player_profile_pic.setAttribute('title',player.nickname);
-                        if (player.picture != null) player_profile_pic.style.backgroundImage = `url(data:image/jpeg;base64,${player.picture})`;
-                        players_container.appendChild(player_profile_pic);
-                    }
-                }
+    const answers_container = (current_game_view == game_vote_view) ? game_vote_challenge_answers_container :  game_challenges_challenge_answers_container;
+    for(const challenge_container of answers_container.children){
+        const challenge_card = challenge_container.querySelector("div.challenge-card");
+        challenge_card.classList.remove('selected');
+        const players_container = challenge_card.querySelector("div.players");
+        players_container.innerHTML = '';
+        for(const[player_id,vote] of Object.entries(vote_data)){
+            if(challenge_container.dataset.id == vote){
+                if (player_id == my_player_id) {challenge_card.classList.add('selected');}
+                const player = players[player_id];
+                const player_profile_pic = document.createElement('div');
+                player_profile_pic.classList.add('profile-picture');
+                player_profile_pic.setAttribute('title',player.nickname);
+                if (player.picture != null) player_profile_pic.style.backgroundImage = `url(data:image/jpeg;base64,${player.picture})`;
+                players_container.appendChild(player_profile_pic);
             }
-            break;
-        default:
-            console.log(current_game_view);
-            break;
+        }
     }
 }
 // document.addEventListener("visibilitychange", (event) => {

@@ -58,7 +58,7 @@
                 <p class="players-counter">1/10 joueurs dans le lobby</p>
                 <div class="scrollable"></div>
                 <p class="game-status">En attente de l'hôte...</p>
-                <button id="start"disabled hidden>Démarrer la partie</button>
+                <button id="start" disabled hidden>Démarrer la partie</button>
             </div>
         </div>
         <div class="profile page" hidden>
@@ -81,7 +81,7 @@
                     </form>
                 </div>
                 <div class="rules box">
-                    <h2>Comment Jouer ?</h1>
+                    <h2>Comment Jouer ?</h2>
                     <div>
                         2 équipes vont s'affronter à tour de rôle, à chaque tour, 
                         les équipes vont obtenir une carte contenant une question avec la réponse associée,
@@ -140,6 +140,7 @@
                     </div>
                 </div>
                 <div class="vote-view" hidden>
+                    <p>Sélectionnez les meilleurs réponses !</p>
                     <div class="challenge-container">
                         <div class="challenge-card flipped">
                             <div class="card-face front">
@@ -155,9 +156,20 @@
                     <div class="challenges-container"></div>  
                 </div>
                 <div class="challenges-view" hidden>
-                    <div>
-                        A votre tour / Au tour de l'équipe adverse
+                    <p id="challenges-state"></p>
+                    <div class="challenge-container">
+                        <div class="challenge-card">
+                            <div class="card-face front">
+                                <h2>Questions pour des <br>pigeons</h2>
+                            </div>
+                            <div class="card-face back">
+                                <p class="card-question"></p>
+                                <p class="card-answer"></p>
+                            </div>
+                        </div>
                     </div>
+                    <p>Vote en cliquant sur la réponse que tu pense être la bonne !</p>
+                    <div class="challenges-container"></div> 
                 </div>
                 <div class="end-view" hidden></div>
             </div>

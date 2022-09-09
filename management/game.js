@@ -167,9 +167,12 @@ module.exports = function (io) {
                     }
                     break;
                 case 'challenge':
-                    if (player_data != NaN) {
+                    if (game_data.voting_team == team && player_data != NaN) {
                         player_data = parseInt(player_data);
-                        game_data.players_data[player_id].vote = player_data;
+                        if(player_data != game_data.players_data[player_id].vote){
+                            game_data.players_data[player_id].vote = player_data;
+                            io.to(room.id).emit('vote', get_team_votes(room, team));
+                        }
                     }
                     break;
                 default:
@@ -217,6 +220,7 @@ function next_step(room, io) {
             case 'questions':
                 data.state = "vote";
                 data_to_send.state = "vote";
+                //check numbers of questions
                 if (data.teams[0].length + data.teams[1].length == 4) {
                     // for(const [player_id, data] of Object.entries(room.game_data.players_data)){
                     //     
@@ -245,7 +249,6 @@ function next_step(room, io) {
                                 challenge: [data.teams_data[team_id].challenge[0],''],
                                 challenges: data.teams_data[team_id].challenges
                             };
-                            data_to_send.players_data = get_team_votes(room, team_id);
                             emit_team(io, room, team_id,'game_update', data_to_send);
                         }
                     }
@@ -287,7 +290,7 @@ function next_step(room, io) {
                             }
                         }
                         next_step(room, io);
-                    }, 30000);
+                    }, 32000);
                 }
                 break;
             case 'vote':
@@ -297,7 +300,6 @@ function next_step(room, io) {
                 data_to_send.next_step_time = set_timeout_time(room, 60);
                 data_to_send.next_step_time_start = data.next_step_time_start;
                 data_to_send.team_data = data.teams_data[1];
-                data_to_send.players_data = get_team_votes(room, 0);
                 data.voting_team = 0;
                 data_to_send.voting_team = 0;
                 emit_team(io, room, 0,'game_update', data_to_send);
@@ -306,15 +308,18 @@ function next_step(room, io) {
                     data.next_step_time = set_timeout_time(room, 60);
                     data_to_send.next_step_time = set_timeout_time(room, 60);
                     data_to_send.next_step_time_start = data.next_step_time_start;
+                    data.voting_team = 1;
                     data_to_send.voting_team = 1;
                     data_to_send.team_data = data.teams_data[0];
                     emit_team(io, room, 0,'game_update', data_to_send);
                     emit_team(io, room, 1,'game_update', data_to_send);
-                    data.next_step
+                    data.next_step_timeout = setTimeout(() => {
+                        next_step(room,io);
+                    }, 60000);
                 }, 60000);
                 break;
             case 'challenge':
-
+                
             case 'end':
                 break;
         }
