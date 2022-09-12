@@ -531,15 +531,15 @@ function game_update(game_data) {
                     challenge_container.addEventListener('click',()=>socket.emit('game_data',userToken,room_code,index));
                     game_vote_challenge_answers_container.appendChild(challenge_container);          
                 }
-                
             }else{
                 switch_game_view(game_wait_view);
             }
             show_countdown(game_data.next_step_time_start,game_data.next_step_time);
-            game_questions_challenge_card.classList.remove('flipped');
+            
             break;
         case 'challenge':
             switch_game_view(game_challenges_view);
+            game_questions_challenge_card.classList.remove('flipped');
             show_countdown(game_data.next_step_time_start,game_data.next_step_time);
             const my_team = game_data.teams[0].includes(my_player_id.toString()) ? 0 : 1;
 

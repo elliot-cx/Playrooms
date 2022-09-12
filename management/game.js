@@ -252,7 +252,7 @@ function next_step(room, io) {
 
                 data.next_step_timeout = setTimeout(() => {
                     next_step(room, io);
-                }, 93000);
+                }, 63000);
                 break;
             case 'questions':
                 data.state = "vote";
@@ -371,11 +371,15 @@ function next_step(room, io) {
                                 }
                             }, 10000);
                         }, 60000);
-                    }, 5000);
+                    }, 10000);
                 }, 60000);
                 break;
             case 'challenge':
-                console.log('Game ended');
+                data.state = "end";
+                data_to_send.state = "end";
+                data.next_step_time = set_timeout_time(room, 60);
+                data_to_send.next_step_time = set_timeout_time(room, 60);
+                data_to_send.next_step_time_start = data.next_step_time_start;
             case 'end':
                 break;
         }
