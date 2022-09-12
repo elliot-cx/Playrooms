@@ -217,12 +217,13 @@ io.on('connection',(socket) => {
         if (room && room.players_auth[user_token]) {
             if (room.players_auth[user_token].role == 'host'){
                 if (room.state == 'lobby') {
-                    if (Object.keys(room.players).length > 1) {
+                    if (Object.keys(room.players).length > 3) {
                         room.state = 'playing';
                         game.start(room);
                     }
                     return;
                 }
+                
             }else{
                 socket.emit('close','authError');
             }

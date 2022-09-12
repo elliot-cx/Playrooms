@@ -101,6 +101,7 @@ function show_page(page,back=true) {
     lobby_page.setAttribute('hidden',null);
     loading_page.setAttribute('hidden',null);
     profile_page.setAttribute('hidden',null);
+    game_page.setAttribute('hidden',null)
     if (!back){background_page.setAttribute('hidden',null);}
     page.removeAttribute('hidden');
 }
@@ -303,7 +304,7 @@ function render_lobby() {
         lobby_waiting_host_label.setAttribute('hidden','true');
     }
 
-    if (nb_players > 1) {
+    if (nb_players > 3) {
         lobby_start_button.removeAttribute('disabled');
         lobby_start_button.innerText = "Démarrer la partie";
         lobby_waiting_host_label.innerText = "En attente de l'hôte...";
@@ -592,6 +593,11 @@ function game_update(game_data) {
                 game_challenges_challenge_answers_container.appendChild(challenge_container);        
             }
             break;
+        case 'lobby':
+            game_challenges_result_popup.setAttribute('hidden',null);
+            render_lobby();
+            show_page(lobby_page);
+            break;
         default:
             break;
     }
@@ -677,4 +683,4 @@ function challenge_result_event(result_data) {
 //     } else {
 //       console.log("tab is inactive")
 //     }
-//   });
+// });

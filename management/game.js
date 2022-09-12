@@ -239,13 +239,11 @@ function next_step(room, io) {
 
                 //récupération des challenges
                 let challenge = get_random_challenge(room);
-                // console.log('Challenge 1 : ',challenge);
                 data.teams_data[0].challenge = challenge;
                 data_to_send.team_data = { challenge: [challenge[0],''] };
                 emit_team(io, room, 0,'game_update', data_to_send);
 
                 challenge = get_random_challenge(room);
-                // console.log('Challenge 2 : ',challenge);
                 data.teams_data[1].challenge = challenge;
                 data_to_send.team_data = { challenge: [challenge[0],''] };
                 emit_team(io, room, 1,'game_update', data_to_send);
@@ -259,9 +257,6 @@ function next_step(room, io) {
                 data_to_send.state = "vote";
                 //check numbers of questions
                 if (data.teams[0].length + data.teams[1].length == 4) {
-                    // for(const [player_id, data] of Object.entries(room.game_data.players_data)){
-                    //     
-                    // }
                     for (const team_id in data.teams) {
                         data.teams_data[team_id].challenges = get_team_challenges(room, team_id);
                         data.teams_data[team_id].challenges.push(data.teams_data[team_id].challenge[1]);
@@ -310,8 +305,6 @@ function next_step(room, io) {
                             for(const vote of tab){
                                 if(selected_challenges.length == 2){break;}
                                 if (vote[0] != 'null') {
-                                    // console.log('vote',vote[0]);
-                                    // console.log(team_challenges[vote[0]]);
                                     selected_challenges.push(team_challenges[vote[0]]);
                                 }
                             }
@@ -360,7 +353,6 @@ function next_step(room, io) {
                             emit_team(io,room,1,'challenge_result',[[data.teams_points[1],points],data.teams_points[0],valid_index]);
                             emit_team(io,room,0,'challenge_result',[data.teams_points[0],[data.teams_points[1],points],valid_index]);
 
-                            // io.to(room.id).emit('challenge_result',data.voting_team,data.teams_points[data.voting_team],points,valid_index);
                             data.teams_points[data.voting_team] = points;
                             setTimeout(() => {
                                 if (data.teams_points[0] != 0 && data.teams_points[1] != 0) {
@@ -375,13 +367,11 @@ function next_step(room, io) {
                 }, 60000);
                 break;
             case 'challenge':
-                data.state = "end";
-                data_to_send.state = "end";
-                data.next_step_time = set_timeout_time(room, 60);
-                data_to_send.next_step_time = set_timeout_time(room, 60);
-                data_to_send.next_step_time_start = data.next_step_time_start;
-            case 'end':
-                break;
+                room.state = 'lobby';
+                data.state = 'lobby';
+                data_to_send.state = 'lobby';
+                emit_team(io, room, 0,'game_update', data_to_send);
+                emit_team(io, room, 1,'game_update', data_to_send);
         }
     }
 }
