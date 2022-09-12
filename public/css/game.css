@@ -94,6 +94,21 @@ body > .base{
     margin-left: 0.5rem;
 }
 
+/* Pop Up
+
+.popup{
+    backdrop-filter: var(--blur);
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+} */
+
+
 /* Anwser Component */
 
 
@@ -391,6 +406,34 @@ body > .base{
     gap: 1.5rem;
     width: 100%;
     align-items: center;
+}
+
+.game.page .challenges-view .popup{
+    backdrop-filter: var(--blur);
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game.page .challenges-view .popup .box{
+    text-align: center;
+}
+.game.page .challenges-view .popup .box > div{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+}
+
+.game.page .challenges-view .popup .box > div p{
+    margin-top: 0.5rem;
+    font-size: 3rem;
+    font-weight: lighter;
 }
 
 @media screen and (min-width:1250px){

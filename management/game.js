@@ -2,7 +2,9 @@
 
 const lobby = require("./lobby.js");
 
-const challenges_entries = shuffle(Object.entries(require("../private/challenges.json")));
+const challenges_dict = require("../private/challenges.json");
+
+const challenges_entries = Object.entries(challenges_dict);
 
 function shuffle(array) {
     let currentIndex = array.length, randomIndex;
@@ -68,9 +70,44 @@ function get_team_challenges(room, team_id) {
         const data = room.game_data.players_data[player_id];
         if (data.challenge != '') {
             challenges.push(data.challenge);
+            data.challenge = '';
         }
     }
     return challenges;
+}
+
+function update_team_points(room) {
+    const data = room.game_data;
+    const enemies_team_id = data.voting_team == 0 ? 1 : 0;
+
+    const team_challenge = data.teams_data[enemies_team_id].challenge[0];
+    const team_challenge_answers = data.teams_data[enemies_team_id].challenges;
+
+    const challenge_answer = challenges_dict[team_challenge];
+
+    let valid_index = [];
+
+    team_challenge_answers.map((val,index,_)=>{
+        if (val == challenge_answer) {
+            valid_index.push(index);
+        }
+    });
+
+    const votes = get_team_votes(room,data.voting_team);
+    const nb_votes = Object.keys(votes).length;
+    if (nb_votes > 0) {
+        let nb_valid = 0;
+        for(const [player_id,vote] of Object.entries(votes)){
+            if (valid_index.includes(vote)) {
+                nb_valid++;
+            }
+            data.players_data[player_id].vote = null;
+        }
+        return [Math.round(data.teams_points[data.voting_team] * (nb_valid / nb_votes)),valid_index];
+    }else{
+        return [0,valid_index];
+    }
+
 }
 
 module.exports = function (io) {
@@ -202,13 +239,13 @@ function next_step(room, io) {
 
                 //récupération des challenges
                 let challenge = get_random_challenge(room);
-                console.log('Challenge 1 : ',challenge);
+                // console.log('Challenge 1 : ',challenge);
                 data.teams_data[0].challenge = challenge;
                 data_to_send.team_data = { challenge: [challenge[0],''] };
                 emit_team(io, room, 0,'game_update', data_to_send);
 
                 challenge = get_random_challenge(room);
-                console.log('Challenge 2 : ',challenge);
+                // console.log('Challenge 2 : ',challenge);
                 data.teams_data[1].challenge = challenge;
                 data_to_send.team_data = { challenge: [challenge[0],''] };
                 emit_team(io, room, 1,'game_update', data_to_send);
@@ -254,40 +291,38 @@ function next_step(room, io) {
                     }
                     data.next_step_timeout = setTimeout(() => {
                         for(const team_id in data.teams){
-                            if (data.teams[team_id].length != 2) {
-                                top = {};
-                                let team_challenges = data.teams_data[team_id].challenges;
+                            top = {};
+                            let team_challenges = data.teams_data[team_id].challenges;
 
-                                team_challenges.map((_,index,array) => {
-                                    top[index]=0;
-                                });
+                            team_challenges.map((_,index,array) => {
+                                top[index]=0;
+                            });
 
-                                data.teams[team_id].map((player_id,index,array)=>{
-                                    top[data.players_data[player_id].vote]++
-                                    data.players_data[player_id].vote = null;
-                                });
+                            data.teams[team_id].map((player_id,index,array)=>{
+                                top[data.players_data[player_id].vote]++
+                                data.players_data[player_id].vote = null;
+                            });
 
-                                tab = Object.entries(top).sort((a,b) => b[1] - a[1]);
-                                
-                                let selected_challenges = new Array();
+                            tab = Object.entries(top).sort((a,b) => b[1] - a[1]);
+                            
+                            let selected_challenges = new Array();
 
-                                for(const vote of tab){
-                                    if(selected_challenges.length == 2){break;}
-                                    if (vote[0] != 'null') {
-                                        // console.log('vote',vote[0]);
-                                        // console.log(team_challenges[vote[0]]);
-                                        selected_challenges.push(team_challenges[vote[0]]);
-                                    }
+                            for(const vote of tab){
+                                if(selected_challenges.length == 2){break;}
+                                if (vote[0] != 'null') {
+                                    // console.log('vote',vote[0]);
+                                    // console.log(team_challenges[vote[0]]);
+                                    selected_challenges.push(team_challenges[vote[0]]);
                                 }
-
-                                selected_challenges.push(data.teams_data[team_id].challenge[1]);
-                                shuffle(selected_challenges);
-
-                                data.teams_data[team_id].challenges = Array.from(selected_challenges);
-                                data.teams_data[team_id].challenge[1] = '';
-
-                                // console.log('team_challenges',data.teams_data[team_id].challenges);
                             }
+
+                            selected_challenges.push(data.teams_data[team_id].challenge[1]);
+                            shuffle(selected_challenges);
+
+                            data.teams_data[team_id].challenges = Array.from(selected_challenges);
+                            data.teams_data[team_id].challenge[1] = '';
+
+                            // console.log('team_challenges',data.teams_data[team_id].challenges);
                         }
                         next_step(room, io);
                     }, 32000);
@@ -305,27 +340,45 @@ function next_step(room, io) {
                 emit_team(io, room, 0,'game_update', data_to_send);
                 emit_team(io, room, 1,'game_update', data_to_send);
                 data.next_step_timeout = setTimeout(() => {
-                    data.next_step_time = set_timeout_time(room, 60);
-                    data_to_send.next_step_time = set_timeout_time(room, 60);
-                    data_to_send.next_step_time_start = data.next_step_time_start;
-                    data.voting_team = 1;
-                    data_to_send.voting_team = 1;
-                    data_to_send.team_data = data.teams_data[0];
-                    emit_team(io, room, 0,'game_update', data_to_send);
-                    emit_team(io, room, 1,'game_update', data_to_send);
-                    data.next_step_timeout = setTimeout(() => {
-                        next_step(room,io);
-                    }, 60000);
+                    const [points,valid_index] = update_team_points(room);
+                    // io.to(room.id).emit('challenge_result',data.voting_team,data.teams_points[data.voting_team],points,valid_index);
+                    emit_team(io,room,0,'challenge_result',[[data.teams_points[0],points],data.teams_points[1],valid_index]);
+                    emit_team(io,room,1,'challenge_result',[data.teams_points[1],[data.teams_points[0],points],valid_index]);
+                    data.teams_points[data.voting_team] = points;
+
+                    setTimeout(() => {
+                        data.next_step_time = set_timeout_time(room, 60);
+                        data_to_send.next_step_time = set_timeout_time(room, 60);
+                        data_to_send.next_step_time_start = data.next_step_time_start;
+                        data.voting_team = 1;
+                        data_to_send.voting_team = 1;
+                        data_to_send.team_data = data.teams_data[0];
+                        emit_team(io, room, 0,'game_update', data_to_send);
+                        emit_team(io, room, 1,'game_update', data_to_send);
+                        data.next_step_timeout = setTimeout(() => {
+                            const [points,valid_index] = update_team_points(room);
+                            emit_team(io,room,1,'challenge_result',[[data.teams_points[1],points],data.teams_points[0],valid_index]);
+                            emit_team(io,room,0,'challenge_result',[data.teams_points[0],[data.teams_points[1],points],valid_index]);
+
+                            // io.to(room.id).emit('challenge_result',data.voting_team,data.teams_points[data.voting_team],points,valid_index);
+                            data.teams_points[data.voting_team] = points;
+                            setTimeout(() => {
+                                if (data.teams_points[0] != 0 && data.teams_points[1] != 0) {
+                                    data.state = 'teams';
+                                    next_step(room,io);
+                                }else{
+                                    next_step(room,io);
+                                }
+                            }, 10000);
+                        }, 60000);
+                    }, 5000);
                 }, 60000);
                 break;
             case 'challenge':
-                
+                console.log('Game ended');
             case 'end':
                 break;
         }
-        // console.log(room.id);
-        // console.log(data.state);
-        // console.log(room.game_data);
     }
 }
 

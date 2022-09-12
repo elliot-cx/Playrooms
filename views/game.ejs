@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <div class="vote-view" hidden>
-                    <p>Sélectionnez les meilleurs réponses !</p>
+                    <p>Sélectionnez les 2 meilleurs réponses !</p>
                     <div class="challenge-container">
                         <div class="challenge-card flipped">
                             <div class="card-face front">
@@ -156,6 +156,15 @@
                     <div class="challenges-container"></div>  
                 </div>
                 <div class="challenges-view" hidden>
+                    <div class="popup" id="challenges-result-popup" hidden>
+                        <div class="box">
+                            <h2>Bilan des points : </h2>
+                            <div>
+                                <p>16</p>
+                                <p>16</p>
+                            </div>
+                        </div>
+                    </div>
                     <p id="challenges-state"></p>
                     <div class="challenge-container">
                         <div class="challenge-card">
@@ -168,7 +177,7 @@
                             </div>
                         </div>
                     </div>
-                    <p>Vote en cliquant sur la réponse que tu pense être la bonne !</p>
+                    <p id="challenges-instructions"></p>
                     <div class="challenges-container"></div> 
                 </div>
                 <div class="end-view" hidden></div>
