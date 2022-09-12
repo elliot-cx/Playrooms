@@ -233,8 +233,8 @@ function next_step(room, io) {
             case 'teams':
                 data.state = "questions";
                 data_to_send.state = "questions";
-                data.next_step_time = set_timeout_time(room, 90);
-                data_to_send.next_step_time = set_timeout_time(room, 90);
+                data.next_step_time = set_timeout_time(room, 60);
+                data_to_send.next_step_time = set_timeout_time(room, 60);
                 data_to_send.next_step_time_start = data.next_step_time_start;
 
                 //récupération des challenges
