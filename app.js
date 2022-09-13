@@ -244,10 +244,16 @@ io.on('connection',(socket) => {
         }
     });
 
-    socket.on('vote',(player_token,room_id,vote,callback)=>{
+    socket.on('message',(player_token,room_id,message,callback)=>{
         const room = lobby.get_room(room_id);
         if (room) {
-            game.update_player(player_token,room,data,callback);
+            const player_auth = room.players_auth[player_token];
+            if(player_auth){
+                io.to(room_id).emit('message_received',{'player_id':player_auth.id,'message:':message.substring(0,140)});
+                if(callback){callback();}
+            }else{
+                socket.emit('close','authError');
+            }
         }else{
             socket.emit('close','noSuchRoom');
         }

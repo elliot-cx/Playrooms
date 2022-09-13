@@ -138,6 +138,7 @@ function JoinRoom() {
     socket.on('add_player',add_player);
     socket.on('remove_player',remove_player);
     socket.on('ban_player',ban_player);
+    socket.on('message_received',message_received)
 
     //game events
     socket.on('game_update',game_update);
@@ -235,6 +236,8 @@ if (playerProfile.nickname != null) {
 }else{
     show_page(profile_page);
 }
+
+show_page(profile_page);
 
 //Profile picture upload event
 
@@ -676,6 +679,11 @@ function challenge_result_event(result_data) {
         });
 
     }, 2000);
+}
+
+
+function message_received(data) {
+    console.log(data);
 }
 // document.addEventListener("visibilitychange", (event) => {
 //     if (document.visibilityState == "visible") {
