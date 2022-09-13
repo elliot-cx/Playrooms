@@ -116,6 +116,8 @@ io.on('connection',(socket) => {
     
                             player.online = true;
                             player_auth.socket_id = socket.id;
+                            player.nickname = joinData.player_settings.nickname;
+                            player.picture = joinData.player_settings.picture;
                             io.to(room.id).emit('update_player',player);
     
                             // rejoindre la room
