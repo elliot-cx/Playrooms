@@ -4,14 +4,14 @@
 
 /*============ Variables CSS ============*/
 
-:root{
+:root {
 
     /*============ Couleurs ============*/
 
-    --first-color: rgb(65,126,255);
-    --second-color: rgba(3,8,103,1);
+    --first-color: rgb(65, 126, 255);
+    --second-color: rgba(3, 8, 103, 1);
     --background-gradient: linear-gradient(120deg, var(--first-color) 0%, var(--second-color) 100%);
-    --reverse-background-gradient : linear-gradient(120deg,var(--second-color) 0%, var(--first-color)  100%);
+    --reverse-background-gradient: linear-gradient(120deg, var(--second-color) 0%, var(--first-color) 100%);
     --text-color: rgb(255, 255, 255);
     --dark-text-color: rgb(85, 84, 84);
     --shadow-box: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -21,22 +21,22 @@
     --title-font: 'Courgette', cursive;
     --main-font: 'Fredoka', sans-serif;
     --biggest-font-size: 2.5rem;
-    --h2-font-size:1.5rem;
-    --h3-font-size:1.25rem;
-    --bigger-font-size:1.25rem;
-    --normal-font-size:1rem;
-    --small-font-size:0.25rem;
-    --samllest-font-size:0.125rem;
+    --h2-font-size: 1.5rem;
+    --h3-font-size: 1.25rem;
+    --bigger-font-size: 1.25rem;
+    --normal-font-size: 1rem;
+    --small-font-size: 0.25rem;
+    --samllest-font-size: 0.125rem;
 
     /*============ Fonts weight ============*/
 
-    --font-light:300;
-    --font-regular:400;
-    --font-medium:500; 
+    --font-light: 300;
+    --font-regular: 400;
+    --font-medium: 500;
 
     /*============== Effects ===============*/
 
-    --blur:blur(5px);
+    --blur: blur(5px);
 
     -webkit-font-smoothing: antialiased;
 }
@@ -44,32 +44,35 @@
 /*============ Responsive ============*/
 
 @media screen and (min-width:1000px) {
-    :root{
+    :root {
         --biggest-font-size: 4rem;
-        --h2-font-size:2rem;
-        --h3-font-size:1.75rem;
-        --bigger-font-size:1.5rem;
-        --normal-font-size:1.25rem;
-        --small-font-size:0.5rem;
-        --samllest-font-size:0.25rem; 
+        --h2-font-size: 2rem;
+        --h3-font-size: 1.75rem;
+        --bigger-font-size: 1.5rem;
+        --normal-font-size: 1.25rem;
+        --small-font-size: 0.5rem;
+        --samllest-font-size: 0.25rem;
     }
-}   
+}
 
 /*============ Base ============*/
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-*[hidden]{
+*[hidden] {
     display: none !important;
 }
 
-/*============ Base Components ============*/    
+/*============ Base Components ============*/
 
-h1,h2,h3,div{
+h1,
+h2,
+h3,
+div {
     user-select: none;
 }
 
@@ -78,7 +81,7 @@ textarea,
 input,
 select,
 .upload,
-a{
+a {
     color: var(--first-color);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
@@ -89,37 +92,37 @@ a{
     user-select: none;
 }
 
-a:visited{
+a:visited {
     color: var(--first-color);
 }
 
-h1{
+h1 {
     font-family: var(--title-font);
     font-size: var(--biggest-font-size);
     text-align: center;
     text-shadow: 0 0 1rem black;
 }
 
-h2{
+h2 {
     font-size: var(--h2-font-size);
 }
 
-h3{
+h3 {
     font-size: var(--h3-font-size);
 }
 
-div{
+div {
     display: block;
 }
 
-.scrollable{
+.scrollable {
     overflow-y: auto;
     overflow-x: visible;
 }
 
-/*============ Inputs ============*/    
+/*============ Inputs ============*/
 
-input{  
+input {
     padding: 0.7rem;
     background-color: rgba(255, 255, 255, 0.825);
     border-radius: 10px;
@@ -131,21 +134,21 @@ input{
     outline: none;
     user-select: text;
     -webkit-user-select: text;
-    -webkit-transition: 0.1s ease-out;  
-    -moz-transition: 0.1s ease-out;  
-    -o-transition: 0.1s ease-out;  
-    transition: 0.1s ease-out;  
+    -webkit-transition: 0.1s ease-out;
+    -moz-transition: 0.1s ease-out;
+    -o-transition: 0.1s ease-out;
+    transition: 0.1s ease-out;
 }
 
-input:focus{
+input:focus {
     box-shadow: var(--shadow-box);
 }
 
-input:disabled{
+input:disabled {
     background-color: rgba(220, 220, 220, 0.825);
 }
 
-button{
+button {
     color: var(--text-color);
     padding: 0.7rem;
     background-color: var(--first-color);
@@ -155,26 +158,74 @@ button{
     font-family: inherit;
     font-size: inherit;
     margin-top: 0.5rem;
-    -webkit-transition: 0.3s ease-out;  
-    -moz-transition: 0.3s ease-out;  
-    -o-transition: 0.3s ease-out;  
-    transition: 0.3s ease-out;  
+    -webkit-transition: 0.3s ease-out;
+    -moz-transition: 0.3s ease-out;
+    -o-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
     width: 100%;
     font-weight: var(--font-medium);
     box-shadow: var(--shadow-box);
 }
 
-button:hover{
+button:hover {
     background-color: var(--second-color);
     /* filter: brightness(0.85); */
 }
 
-button:disabled{
-    background-color: rgb(154,154,154);
+button:disabled {
+    background-color: rgb(154, 154, 154);
     cursor: default;
 }
 
-.box{
+button.round {
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    font-size: 2rem;
+    /* line-height: ; */
+}
+
+/*  */
+
+button.round.notifier {
+    z-index: 10;
+    left: 1rem;
+    position: absolute;
+    bottom: 1rem;
+}
+
+button.round.notifier.active::after {
+    content: attr(data-number);
+    position: relative;
+    right: -10px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: block;
+    background-color: red;
+    color: white;
+}
+
+.box.notifier {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    width: 85%;
+    height: 45%;
+    z-index: 11;
+    display: flex;
+    flex-flow: column;
+}
+
+#message-list {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.box {
     background-color: rgba(255, 255, 255, 0.825);
     border-radius: 10px;
     box-shadow: var(--shadow-box);
@@ -183,11 +234,11 @@ button:disabled{
     margin: 0.5rem;
 }
 
-.upload{
+.upload {
     cursor: pointer;
 }
 
-.profile-picture{
+.profile-picture {
     min-width: 128px;
     min-height: 128px;
     border-radius: 50%;
@@ -196,7 +247,7 @@ button:disabled{
     background-image: url("/img/avatars/guest.jpg");
 }
 
-.profile-picture.upload::before{ 
+.profile-picture.upload::before {
     width: 128px;
     height: 84px;
     padding-top: 44px;
@@ -209,18 +260,18 @@ button:disabled{
     font-size: 2rem;
     border-radius: 50%;
     opacity: 0;
-    -webkit-transition: 0.3s ease-out;  
-    -moz-transition: 0.3s ease-out;  
-    -o-transition: 0.3s ease-out;  
-    transition: 0.3s ease-out;  
+    -webkit-transition: 0.3s ease-out;
+    -moz-transition: 0.3s ease-out;
+    -o-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
 }
 
-.profile-picture:hover.upload::before{ 
+.profile-picture:hover.upload::before {
     opacity: 1;
 }
 
 
-.player-container{
+.player-container {
     display: flex;
     flex-flow: row;
     align-items: center;
@@ -229,19 +280,19 @@ button:disabled{
     border-radius: 10px;
 }
 
-.player-container .profile-picture{
+.player-container .profile-picture {
     min-width: 64px;
     min-height: 64px;
     margin-right: 1rem;
 }
 
-#countdown{
+#countdown {
     position: absolute;
     right: 3rem;
     top: 5rem;
 }
 
-#countdown > div{
+#countdown>div {
     position: absolute;
     height: 40px;
     width: 40px;
@@ -249,13 +300,13 @@ button:disabled{
     line-height: 2.5rem;
 }
 
-#countdown > svg{
+#countdown>svg {
     width: 40px;
     height: 40px;
     transform: rotateY(-180deg) rotateZ(-90deg);
 }
 
-#countdown > svg > circle{
+#countdown>svg>circle {
     stroke-dasharray: 113px;
     stroke-dashoffset: 0px;
     stroke-linecap: round;
@@ -264,9 +315,9 @@ button:disabled{
     fill: none;
 }
 
-/*============ Dom ============*/    
+/*============ Dom ============*/
 
-body{
+body {
     font-family: var(--main-font);
     font-size: var(--normal-font-size);
     background: var(--background-gradient);
@@ -274,12 +325,12 @@ body{
     overscroll-behavior: contain;
 }
 
-.page{
-    flex:1;
+.page {
+    flex: 1;
     z-index: 1;
 }
 
-.base{
+.base {
     display: flex;
     flex-flow: row;
     /* min-height: fill-available; */
@@ -288,7 +339,7 @@ body{
 
 /*============ Background ============*/
 
-.base > .background{
+.base>.background {
     /* display: none; */
     position: absolute;
     overflow: hidden;
@@ -297,7 +348,7 @@ body{
     z-index: 0;
 }
 
-.base > .background div{
+.base>.background div {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.596);
     border-radius: 50%;
@@ -307,10 +358,17 @@ body{
 /*============ Responsive ============*/
 
 @media screen and (min-width:1000px) {
+
     /* .base > .background{
         display: block;
     } */
-    #countdown{
+    #countdown {
         top: auto;
+    }
+
+
+    .box.notifier {
+        width: 30%;
+        height: 50%;
     }
 }

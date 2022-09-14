@@ -1,4 +1,4 @@
-body > .base{
+body>.base {
     overflow: hidden;
     display: flex;
     flex-flow: column;
@@ -9,7 +9,7 @@ body > .base{
 
 /* Card component */
 
-.challenge-container{
+.challenge-container {
     perspective: 800px;
     width: 350px;
     height: 200px;
@@ -23,15 +23,15 @@ body > .base{
     position: relative;
     cursor: pointer;
 }
-  
+
 .challenge-card.flipped {
     transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
     -o-transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
 }
-  
-.challenge-card > .card-face {
+
+.challenge-card>.card-face {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -42,35 +42,35 @@ body > .base{
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    gap:2rem;
+    gap: 2rem;
     text-align: center;
     border: 10px solid #fff;
     border-radius: 10px;
     padding: 1rem;
 }
 
-.challenge-card.valid > .card-face.back{
-    border: 10px solid rgb(0,255,0);
+.challenge-card.valid>.card-face.back {
+    border: 10px solid rgb(0, 255, 0);
     transition: 1s;
 }
 
-.challenge-card.wrong > .card-face.back{
-    border: 10px solid rgb(255,0,0);
+.challenge-card.wrong>.card-face.back {
+    border: 10px solid rgb(255, 0, 0);
     transition: 1s;
 }
 
-.challenge-card.selected > .card-face.back{
-    border: 10px solid rgb(0,0,255);
+.challenge-card.selected>.card-face.back {
+    border: 10px solid rgb(0, 0, 255);
     transition: 1s;
 }
-  
-  
-.challenge-card > .card-face.front {
+
+
+.challenge-card>.card-face.front {
     background: var(--reverse-background-gradient);
     color: white;
 }
-  
-.challenge-card > .card-face.back {
+
+.challenge-card>.card-face.back {
     background-color: white;
     color: black;
     transform: rotateY(180deg);
@@ -79,7 +79,7 @@ body > .base{
     -webkit-transform: rotateY(180deg);
 }
 
-.challenge-card > .card-face.back > .players{
+.challenge-card>.card-face.back>.players {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -88,7 +88,7 @@ body > .base{
     margin: 0.5rem;
 }
 
-.challenge-card > .card-face.back > .players > .profile-picture{
+.challenge-card>.card-face.back>.players>.profile-picture {
     min-width: 25px;
     min-height: 25px;
     margin-left: 0.5rem;
@@ -114,7 +114,7 @@ body > .base{
 
 /* Error Page */
 
-.error.page{
+.error.page {
     backdrop-filter: var(--blur);
     position: absolute;
     z-index: 100;
@@ -126,17 +126,17 @@ body > .base{
     align-items: center;
 }
 
-.error.page .box{
+.error.page .box {
     text-align: center;
 }
 
-.error.page .box > div p{
+.error.page .box>div p {
     margin-top: 0.5rem;
 }
 
 /* Loading page */
 
-.loading.page{
+.loading.page {
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -145,92 +145,92 @@ body > .base{
 
 /* profile page */
 
-.profile.page .top{
+.profile.page .top {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
 
-.profile.page .main{
+.profile.page .main {
     display: flex;
     flex-flow: column;
 }
 
-.profile.page .main .room-form{
+.profile.page .main .room-form {
     display: flex;
     flex-flow: column;
 }
 
-.profile.page .main .player-entry{
+.profile.page .main .player-entry {
     display: flex;
     flex-flow: column;
     align-items: center;
     margin-top: 0.5rem;
 }
 
-.profile.page .main .player-entry > .profile-picture{
+.profile.page .main .player-entry>.profile-picture {
     margin-right: 0.5rem;
 }
 
-.profile.page .main .nickname-entry{
+.profile.page .main .nickname-entry {
     width: 100%;
 }
 
-.profile.page .main .nickname-entry > h3{
+.profile.page .main .nickname-entry>h3 {
     padding: 0.3rem 0 0.3rem 0;
 }
 
-#nickname{
+#nickname {
     width: 100%;
 }
 
-.profile.page .main .rules{
+.profile.page .main .rules {
     max-width: 320px;
     /* max-height: ; */
 }
 
-.profile.page .main .rules > h2{
+.profile.page .main .rules>h2 {
     text-align: center;
     margin-bottom: 0.5rem;
 }
 
 /* Lobby page */
 
-.lobby.page{
+.lobby.page {
     display: flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
 }
 
-.lobby.page .players-container{
+.lobby.page .players-container {
     display: flex;
     flex-flow: column;
     /* height: 80vh; */
     max-height: 80vh;
-    overflow: visible;   
+    overflow: visible;
 }
 
-.lobby.page .players-container .scrollable p{
+.lobby.page .players-container .scrollable p {
     font-size: var(--bigger-font-size);
 }
 
-.lobby.page .players-container .scrollable p.offline{
+.lobby.page .players-container .scrollable p.offline {
     font-style: italic;
 }
 
-.lobby.page .players-container .scrollable{
+.lobby.page .players-container .scrollable {
     height: 100%;
     border-radius: 10px;
 }
 
-.lobby.page .players-container > p {
+.lobby.page .players-container>p {
     text-align: center;
     padding-top: 0.7rem;
 }
 
 /* Game Page */
 
-.game.page{
+.game.page {
     display: flex;
     flex-flow: column;
     width: 100%;
@@ -238,7 +238,7 @@ body > .base{
     min-height: 100vh;
 }
 
-.game.page .top{
+.game.page .top {
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -247,18 +247,18 @@ body > .base{
     max-height: 20vh;
 }
 
-.game.page .top > h1{
+.game.page .top>h1 {
     font-size: 2.5rem;
 }
 
-.game.page .main{
+.game.page .main {
     height: 80vh;
     width: 100%;
 }
 
 /* Wait Part */
 
-.game.page .wait-view{
+.game.page .wait-view {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -268,7 +268,7 @@ body > .base{
 
 /* Teams Part */
 
-.game.page .teams-view{
+.game.page .teams-view {
     height: 80%;
     width: auto;
     display: flex;
@@ -277,7 +277,7 @@ body > .base{
     align-items: center;
 }
 
-.game.page .teams-view .teams-container{
+.game.page .teams-view .teams-container {
     height: 100%;
     width: 100%;
     display: flex;
@@ -286,11 +286,11 @@ body > .base{
     align-items: center;
 }
 
-.game.page .teams-view .versus-wrapper > h2{
+.game.page .teams-view .versus-wrapper>h2 {
     font-size: 3rem;
 }
 
-.game.page .teams-view .team-container{
+.game.page .teams-view .team-container {
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -301,7 +301,7 @@ body > .base{
     flex-wrap: wrap;
 }
 
-.game.page .teams-view .start-wrapper{
+.game.page .teams-view .start-wrapper {
     height: auto;
     display: flex;
     flex-flow: row;
@@ -311,11 +311,11 @@ body > .base{
     bottom: 2rem;
 }
 
-.game.page .teams-view .start-wrapper span{
-    display:inline-block;
+.game.page .teams-view .start-wrapper span {
+    display: inline-block;
 }
 
-.game.page .teams-view .player-container{
+.game.page .teams-view .player-container {
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -324,7 +324,7 @@ body > .base{
     border-radius: 0;
 }
 
-.game.page .teams-view .player-container .profile-picture{
+.game.page .teams-view .player-container .profile-picture {
     min-width: 64px;
     min-height: 64px;
     margin-right: 0;
@@ -332,37 +332,37 @@ body > .base{
 
 /* Questions Part */
 
-.game.page .questions-view{
+.game.page .questions-view {
     width: auto;
     display: flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    gap:1rem;
+    gap: 1rem;
     height: 90%;
 }
 
-.game.page .questions-view > .box{
+.game.page .questions-view>.box {
     width: 350px;
 }
 
-#challenge-answer{
+#challenge-answer {
     width: 100%;
 }
 
 /* Vote part */
 
-.game.page .vote-view{
+.game.page .vote-view {
     height: 100%;
     width: 100%;
     display: flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    gap:1.5rem;
+    gap: 1.5rem;
 }
 
-.game.page .vote-view .challenge-container{
+.game.page .vote-view .challenge-container {
     perspective: 800px;
     width: 300px;
     height: 150px;
@@ -370,7 +370,7 @@ body > .base{
     min-height: 150px;
 }
 
-.game.page .vote-view .challenges-container{
+.game.page .vote-view .challenges-container {
     display: flex;
     flex-flow: column;
     overflow-y: scroll;
@@ -381,17 +381,17 @@ body > .base{
 
 /* Challenges Part */
 
-.game.page .challenges-view{
+.game.page .challenges-view {
     height: 100%;
     width: 100%;
     display: flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    gap:1.5rem;
+    gap: 1.5rem;
 }
 
-.game.page .challenges-view .challenge-container{
+.game.page .challenges-view .challenge-container {
     perspective: 800px;
     width: 300px;
     height: 150px;
@@ -399,7 +399,7 @@ body > .base{
     min-height: 150px;
 }
 
-.game.page .challenges-view .challenges-container{
+.game.page .challenges-view .challenges-container {
     display: flex;
     flex-flow: column;
     overflow-y: scroll;
@@ -408,7 +408,7 @@ body > .base{
     align-items: center;
 }
 
-.game.page .challenges-view .popup{
+.game.page .challenges-view .popup {
     backdrop-filter: var(--blur);
     position: absolute;
     z-index: 100;
@@ -421,55 +421,59 @@ body > .base{
     align-items: center;
 }
 
-.game.page .challenges-view .popup .box{
+.game.page .challenges-view .popup .box {
     text-align: center;
 }
-.game.page .challenges-view .popup .box > div{
+
+.game.page .challenges-view .popup .box>div {
     display: flex;
     flex-flow: row;
     justify-content: space-around;
 }
 
-.game.page .challenges-view .popup .box > div p{
+.game.page .challenges-view .popup .box>div p {
     margin-top: 0.5rem;
     font-size: 3rem;
     font-weight: lighter;
 }
 
-@media screen and (min-width:1250px){
-    .challenges-container{
+@media screen and (min-width:1250px) {
+    .challenges-container {
         width: 80%;
     }
-}    
+}
 
 @media screen and (min-width:1000px) {
-    
+
     /* Game Component */
 
-    .challenge-container{
+    .challenge-container {
         perspective: 800px;
         width: 400px;
         height: 250px;
-    }    
+    }
 
     /* Profile page */
 
-    .profile.page .main .room-form{
+    .profile.page .main .room-form {
         flex-flow: row;
-    }  
-    .profile.page .main{
+    }
+
+    .profile.page .main {
         flex-flow: row;
         margin-top: 1.5rem;
     }
-    .profile.page .main .rules{
+
+    .profile.page .main .rules {
         max-width: 600px;
     }
 
-    .profile.page .main .player-entry{
+    .profile.page .main .player-entry {
         margin-bottom: 0.5rem;
         flex-flow: row;
     }
-    .profile.page .main .nickname-entry{
+
+    .profile.page .main .nickname-entry {
         width: auto;
     }
 
@@ -477,7 +481,7 @@ body > .base{
 
     /* Game Page */
 
-    .game.page .top > h1{
+    .game.page .top>h1 {
         font-size: 2.7rem;
     }
 
@@ -485,11 +489,11 @@ body > .base{
 
     /* Teams part */
 
-    .game.page .teams-view .teams-container{
+    .game.page .teams-view .teams-container {
         flex-flow: row;
     }
 
-    .game.page .teams-view .team-container{
+    .game.page .teams-view .team-container {
         flex-flow: row;
         flex-wrap: wrap;
         height: auto;
@@ -497,7 +501,7 @@ body > .base{
         margin: 1rem;
     }
 
-    .game.page .teams-view .player-container .profile-picture{
+    .game.page .teams-view .player-container .profile-picture {
         min-width: 96px;
         min-height: 96px;
         margin-right: 0;
@@ -505,19 +509,19 @@ body > .base{
 
     /* Questions Part */
 
-    .game.page .questions-view{
+    .game.page .questions-view {
         flex-flow: row;
         gap: 3rem;
         height: 100%;
     }
 
-    .game.page .questions-view > .box{
+    .game.page .questions-view>.box {
         width: 400px;
     }
 
     /* Vote Part */
 
-    .game.page .vote-view .challenges-container{
+    .game.page .vote-view .challenges-container {
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
@@ -525,16 +529,16 @@ body > .base{
         width: 100%;
         align-items: center;
         justify-content: center;
-        overflow-y:hidden;
+        overflow-y: hidden;
 
-    }    
-    
-    .game.page .vote-view .challenge-container h2{
+    }
+
+    .game.page .vote-view .challenge-container h2 {
         font-size: 1.5rem;
     }
 
     /* Challenges Part */
-    .game.page .challenges-view .challenges-container{
+    .game.page .challenges-view .challenges-container {
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
@@ -542,11 +546,11 @@ body > .base{
         width: 100%;
         align-items: center;
         justify-content: center;
-        overflow-y:hidden;
+        overflow-y: hidden;
 
-    }    
-    
-    .game.page .challenges-view .challenge-container h2{
+    }
+
+    .game.page .challenges-view .challenge-container h2 {
         font-size: 1.5rem;
     }
 

@@ -14,50 +14,50 @@ app.use('/animejs', express.static(path.join(__dirname, 'node_modules/animejs/li
 app.use(express.static('public'));
 app.use(express.json());
 
-app.set('view engine','ejs');
+app.set('view engine', 'ejs');
 
 // Routing
 
-app.get('/',(_,res) => {
+app.get('/', (_, res) => {
     res.render('index');
 });
 
-app.get('/[a-zA-Z]{4}',(_,res)=>{
+app.get('/[a-zA-Z]{4}', (_, res) => {
     res.render('game');
 });
 
 // api pour la création et l'accès aux rooms
 
-app.post('/api/:action(start|join)',(req,res)=>{
+app.post('/api/:action(start|join)', (req, res) => {
     if (req.params.action == 'start') {
-        let room = lobby.create(req.body.creatorToken,req.body.room_name);
-        res.json({"partyCode": room.id});
+        let room = lobby.create(req.body.creatorToken, req.body.room_name);
+        res.json({ "partyCode": room.id });
     } else {
         // Pour l'instant, ce end-point n'est pas utilisé
         let rooms = lobby.get_rooms();
         if (rooms.find(r => r.id == req.body.id)) {
-            res.json({"errorCode":null});
+            res.json({ "errorCode": null });
         } else {
-            res.json({"errorCode":"noSuchRoom"});
+            res.json({ "errorCode": "noSuchRoom" });
         }
     }
 });
 
 // api pour la gestion via panel de controle
 
-app.get('/api/cpanel',(req,res)=>{
+app.get('/api/cpanel', (req, res) => {
     res.render('cpanel');
 });
 
 //redirection en cas de page random
 
-app.get('*',(req,res)=>{
+app.get('*', (req, res) => {
     res.redirect("/");
 });
 
 //lancer le serveur
 
-server.listen(port,()=>{ 
+server.listen(port, () => {
     console.log('Server is now running...');
     // setInterval(() => {
     //     console.clear();
@@ -69,18 +69,18 @@ server.listen(port,()=>{
 
 //sockets events
 
-io.on('connection',(socket) => {
+io.on('connection', (socket) => {
 
     // console.log(io.engine.clientsCount);
 
     // lors de la tentative de connexion à une room
-    socket.on('joinRoom',(joinData,callback)=>{
+    socket.on('joinRoom', (joinData, callback) => {
 
         // Récupération de la salle actuellle
         const room = lobby.get_room(joinData.room_code);
 
         // Vérification de la salle
-        if (room){
+        if (room) {
 
             // récupération du token
             let player_token = joinData.user_token;
@@ -98,72 +98,72 @@ io.on('connection',(socket) => {
                 if (player_auth.role == 'banned') {
 
                     // fermeture du client
-                    socket.emit('close','banned');
-                    
-                }else{
-                    
+                    socket.emit('close', 'banned');
+
+                } else {
+
                     // détecter si le joueur est déjà connecté
                     let player = room.players[player_id];
 
                     if (player) {
                         if (player.online) {
                             // on ferme le client
-                            socket.emit('close','alreadyConnected');
-                        }else{
-    
+                            socket.emit('close', 'alreadyConnected');
+                        } else {
+
                             // TODO : Vérification de si le joueur a été expulsé pour inactivité de +30s
-                            lobby.check_timeout(room,player_id);
-    
+                            lobby.check_timeout(room, player_id);
+
                             player.online = true;
                             player_auth.socket_id = socket.id;
                             player.nickname = joinData.player_settings.nickname;
                             player.picture = joinData.player_settings.picture;
-                            io.to(room.id).emit('update_player',player);
-    
+                            io.to(room.id).emit('update_player', player);
+
                             // rejoindre la room
-                            
+
                             socket.join(room.id);
-    
+
                             // renvoi des données de la salle
-    
+
                             callback({
-                                id : room.id,
-                                game_id : room.game_id,
-                                name : room.name,
-                                state : room.state,
-                                players : room.players
-                            },player_id);
-                        }   
-                    }else{
-                        let player = {
-                            id : player_id,
-                            online : true,
-                            nickname : joinData.player_settings.nickname,
-                            picture : joinData.player_settings.picture,
-                            role : null
+                                id: room.id,
+                                game_id: room.game_id,
+                                name: room.name,
+                                state: room.state,
+                                players: room.players
+                            }, player_id);
                         }
-        
+                    } else {
+                        let player = {
+                            id: player_id,
+                            online: true,
+                            nickname: joinData.player_settings.nickname,
+                            picture: joinData.player_settings.picture,
+                            role: null
+                        }
+
                         // ajout du joueur dans la salle
-                        if(lobby.add_player(room,player,player_token,socket.id,null)){
-        
+                        if (lobby.add_player(room, player, player_token, socket.id, null)) {
+
                             socket.join(room.id);
-                            
+
                             callback({
-                                id : room.id,
-                                game_id : room.game_id,
-                                name : room.name,
-                                state : room.state,
-                                players : room.players
-                            },player_id);    
-        
+                                id: room.id,
+                                game_id: room.game_id,
+                                name: room.name,
+                                state: room.state,
+                                players: room.players
+                            }, player_id);
+
                             // On notifie les autres clients
-                            socket.to(room.id).emit('add_player',player);
-                        }else{
-                            socket.emit('close','tooManyPlayers');
+                            socket.to(room.id).emit('add_player', player);
+                        } else {
+                            socket.emit('close', 'tooManyPlayers');
                         }
                     }
                 }
-            }else{
+            } else {
                 // on créer un nouveau joueur
 
                 //génèration de l'identifiant du joueur
@@ -173,51 +173,51 @@ io.on('connection',(socket) => {
 
                 //TODO : Vérification host
                 if (room.players[player_id]) {
-                    
+
                 }
 
                 let role = (player_id == 0) ? 'host' : null;
 
                 // création du joueur
                 let player = {
-                    id : player_id,
-                    online : true,
-                    nickname : joinData.player_settings.nickname,
-                    picture : joinData.player_settings.picture,
-                    role : role
+                    id: player_id,
+                    online: true,
+                    nickname: joinData.player_settings.nickname,
+                    picture: joinData.player_settings.picture,
+                    role: role
                 }
 
                 // ajout du joueur dans la salle
-                if(lobby.add_player(room,player,player_token,socket.id,role)){
+                if (lobby.add_player(room, player, player_token, socket.id, role)) {
 
                     socket.join(room.id);
-                    
+
                     callback({
-                        id : room.id,
-                        game_id : room.game_id,
-                        name : room.name,
-                        state : room.state,
-                        players : room.players
-                    },player_id);    
+                        id: room.id,
+                        game_id: room.game_id,
+                        name: room.name,
+                        state: room.state,
+                        players: room.players
+                    }, player_id);
 
                     // On notifie les autres clients
-                    socket.to(room.id).emit('add_player',player);
-                }else{
-                    socket.emit('close','tooManyPlayers');
+                    socket.to(room.id).emit('add_player', player);
+                } else {
+                    socket.emit('close', 'tooManyPlayers');
                 }
             }
-        }else{
+        } else {
             // si la room n'existe pas, fermeture du client
-            socket.emit('close','noSuchRoom');
+            socket.emit('close', 'noSuchRoom');
         }
     });
 
-    socket.on('start',(user_token,room_id)=>{
+    socket.on('start', (user_token, room_id) => {
         //start a game
-        let room = lobby.get_room(room_id); 
+        let room = lobby.get_room(room_id);
 
         if (room && room.players_auth[user_token]) {
-            if (room.players_auth[user_token].role == 'host'){
+            if (room.players_auth[user_token].role == 'host') {
                 if (room.state == 'lobby') {
                     if (Object.keys(room.players).length > 3) {
                         room.state = 'playing';
@@ -225,81 +225,81 @@ io.on('connection',(socket) => {
                     }
                     return;
                 }
-                
-            }else{
-                socket.emit('close','authError');
+
+            } else {
+                socket.emit('close', 'authError');
             }
         } else {
-            socket.emit('close','noSuchRoom');
+            socket.emit('close', 'noSuchRoom');
         }
-       
+
     });
 
-    socket.on('game_data',(player_token,room_id,data,callback)=>{
+    socket.on('game_data', (player_token, room_id, data, callback) => {
         const room = lobby.get_room(room_id);
         if (room) {
-            game.update_player(player_token,room,data,callback);
-        }else{
-            socket.emit('close','noSuchRoom');
+            game.update_player(player_token, room, data, callback);
+        } else {
+            socket.emit('close', 'noSuchRoom');
         }
     });
 
-    socket.on('message',(player_token,room_id,message,callback)=>{
+    socket.on('message', (player_token, room_id, message, callback) => {
         const room = lobby.get_room(room_id);
         if (room) {
             const player_auth = room.players_auth[player_token];
-            if(player_auth){
-                io.to(room_id).emit('message_received',{'player_id':player_auth.id,'message:':message.substring(0,140)});
-                if(callback){callback();}
-            }else{
-                socket.emit('close','authError');
+            if (player_auth) {
+                io.to(room_id).emit('message_received', { 'player_id': player_auth.id, 'message': message.substring(0, 140) });
+                if (callback) { callback(); }
+            } else {
+                socket.emit('close', 'authError');
             }
-        }else{
-            socket.emit('close','noSuchRoom');
+        } else {
+            socket.emit('close', 'noSuchRoom');
         }
     });
 
-    socket.on('ban',(data)=>{
+    socket.on('ban', (data) => {
         const room = lobby.get_room(data.room_id);
         if (room) {
             if (room.players_auth[data.user_token].role == 'host') {
-                lobby.ban_player(room,data.player_id);
-                banned_player_socket = lobby.get_player_socket(data.player_id); 
-                if(banned_player_socket){
-                    io.to(banned_player).emit('close','banned');
-                    io.to(room.id).except(banned_player).emit('ban_player',data.player_id);
+                lobby.ban_player(room, data.player_id);
+                banned_player_socket = lobby.get_player_socket(data.player_id);
+                if (banned_player_socket) {
+                    io.to(banned_player).emit('close', 'banned');
+                    io.to(room.id).except(banned_player).emit('ban_player', data.player_id);
                 }
             } else {
-                socket.emit('close','authError');
+                socket.emit('close', 'authError');
             }
-        }else{
+        } else {
             // ne devrait pas arriver
-            socket.emit('close','noSuchRoom');
+            socket.emit('close', 'noSuchRoom');
         }
     });
 
-    socket.on('disconnect',()=>{
+    socket.on('disconnect', () => {
         const rooms = lobby.get_rooms();
         // à améliorer pour la rapidité 
 
         rooms.forEach(room => {
             // key = user token , data = player id, socket id, role...
-            for(const [key, data] of Object.entries(room.players_auth)){
+            for (const [key, data] of Object.entries(room.players_auth)) {
 
                 // TODO : vérifier si la déconnexion n'est pas intentionnelle
 
                 if (data.socket_id == socket.id) {
                     let player = room.players[data.id];
                     player.online = false;
-                    io.to(room.id).emit('update_player',player);
+                    io.to(room.id).emit('update_player', player);
 
                     //Gérer le kickout
 
                     //TODO : vérifier la déconnexion de l'hote
 
-                    lobby.set_timeout(room,player.id,()=>{
-                        lobby.remove_player(room,player.id);
-                        io.to(room.id).emit('remove_player',player.id);
+                    lobby.set_timeout(room, player.id, () => {
+                        lobby.remove_player(room, player.id);
+                        io.to(room.id).emit('remove_player', player.id);
                         if (Object.keys(room.players).length == 0) {
                             clearTimeout(room.game_data.next_step_timeout);
                             lobby.delete(room);
