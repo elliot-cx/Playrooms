@@ -6,13 +6,27 @@ const loading_page = document.querySelector('.loading.page');
 const profile_page = document.querySelector('.profile.page');
 const game_page = document.querySelector('.game.page');
 
-const message_list = document.getElementById('message-list');
+const message_container = document.getElementById('message-container');
+const message_toggle = document.getElementById('message-toggle');
+message_toggle.onclick = (e) => {
+    if (message_container.classList.contains('active')) {
+        message_container.classList.remove('active');
+    }else{
+        message_container.classList.add('active');
+    }
+}
+const message_list = message_container.querySelector('div.message-list');
 const message_input = document.getElementById('message-input');
 message_input.onkeyup = (e) => {
     e.preventDefault();
     if (e.keyCode === 13) {
         socket.emit('message', userToken, room_code, message_input.value, () => {
             message_input.value = '';
+            message_input.setAttribute('disabled', true);
+            setTimeout(()=>{
+                message_input.removeAttribute('disabled');
+                message_input.focus();
+            },1000);
         });
     }
 }
@@ -696,10 +710,11 @@ function challenge_result_event(result_data) {
 
 
 function message_received(data) {
-    console.log(data);
+
     let message = document.createElement('p');
-    message.innerText = data.message;
+    message.innerText = `${players[data.player_id].nickname} : ${data.message}`;
     message_list.appendChild(message);
+    message_list.scrollTo(0,message_list.scrollHeight);
 
 }
 // document.addEventListener("visibilitychange", (event) => {
