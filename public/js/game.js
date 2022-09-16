@@ -141,6 +141,11 @@ function show_page(page, back = true) {
     game_page.setAttribute('hidden', null)
     if (!back) { background_page.setAttribute('hidden', null); }
     page.removeAttribute('hidden');
+    if (page == profile_page || page == loading_page) {
+        message_toggle.setAttribute('hidden',true);
+    }else{
+        message_toggle.removeAttribute('hidden');
+    }
 }
 
 function display_error(message) {
