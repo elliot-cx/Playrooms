@@ -16,6 +16,7 @@ message_toggle.onclick = (e) => {
         message_toggle.classList.remove('active');
         message_toggle.dataset.number = 0;
         message_input.focus();
+        message_list.scrollTo(0,message_list.scrollHeight);
     }
 }
 const message_list = message_container.querySelector('div.message-list');
@@ -722,7 +723,6 @@ function challenge_result_event(result_data) {
 
 
 function message_received(data) {
-
     const message = document.createElement('p');
     message.innerText = `${players[data.player_id].nickname} : ${data.message}`;
     message_list.appendChild(message);
