@@ -13,6 +13,9 @@ message_toggle.onclick = (e) => {
         message_container.classList.remove('active');
     }else{
         message_container.classList.add('active');
+        message_toggle.classList.remove('active');
+        message_toggle.dataset.number = 0;
+        message_input.focus();
     }
 }
 const message_list = message_container.querySelector('div.message-list');
@@ -94,6 +97,14 @@ game_questions_challenge_answer_input.onkeyup = (e) => {
     if (e.keyCode === 13) {
         game_questions_challenge_valid_btn.click();
     }
+}
+
+game_questions_challenge_answer_input.onmouseenter = (e) => {
+    
+}
+
+game_questions_challenge_answer_input.onmouseleave = (e) => {
+
 }
 
 const game_vote_challenge_card = game_vote_view.querySelector('div.challenge-card');
@@ -262,7 +273,7 @@ if (playerProfile.nickname != null) {
     show_page(profile_page);
 }
 
-show_page(profile_page);
+// show_page(profile_page);
 
 //Profile picture upload event
 
@@ -479,6 +490,7 @@ function game_update(game_data) {
                 anime({
                     targets: '.versus-wrapper h2',
                     scale: [1, 50],
+                    opacity: [1.0,0.0],
                     zIndex: 3,
                     background: 'linear-gradient(120deg, var(--first-color) 0%, var(--second-color) 100%)',
                     color: ['rgba(255, 255, 255, 255)', 'rgba(255, 255, 255, 0)'],
@@ -711,11 +723,17 @@ function challenge_result_event(result_data) {
 
 function message_received(data) {
 
-    let message = document.createElement('p');
+    const message = document.createElement('p');
     message.innerText = `${players[data.player_id].nickname} : ${data.message}`;
     message_list.appendChild(message);
     message_list.scrollTo(0,message_list.scrollHeight);
-
+    if(message_list.children.length > 100){
+        message_list.removeChild(message_list.children[0]);
+    }
+    if (!message_container.classList.contains('active')) {
+        message_toggle.classList.add('active');
+        message_toggle.dataset.number++;
+    }
 }
 // document.addEventListener("visibilitychange", (event) => {
 //     if (document.visibilityState == "visible") {

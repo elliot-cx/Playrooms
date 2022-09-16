@@ -12,6 +12,8 @@ if (window.innerWidth >= 1000) {
         div.style.height = hw + "px";
         div.style.width = hw + "px";
         div.style.top = "110%";
+        // div.style.backgroundImage = "url('https://cdn.discordapp.com/attachments/929500253734969378/1019669361960693962/Crous_Scam.png')";
+        // div.style.backgroundSize = 'cover';
         background_page.appendChild(div);
         let animation = anime({
             targets:div,
