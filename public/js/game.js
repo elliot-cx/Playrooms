@@ -11,12 +11,12 @@ const message_toggle = document.getElementById('message-toggle');
 message_toggle.onclick = (e) => {
     if (message_container.classList.contains('active')) {
         message_container.classList.remove('active');
-    }else{
+    } else {
         message_container.classList.add('active');
         message_toggle.classList.remove('active');
         message_toggle.dataset.number = 0;
         message_input.focus();
-        message_list.scrollTo(0,message_list.scrollHeight);
+        message_list.scrollTo(0, message_list.scrollHeight);
     }
 }
 const message_list = message_container.querySelector('div.message-list');
@@ -27,10 +27,10 @@ message_input.onkeyup = (e) => {
         socket.emit('message', userToken, room_code, message_input.value, () => {
             message_input.value = '';
             message_input.setAttribute('disabled', true);
-            setTimeout(()=>{
+            setTimeout(() => {
                 message_input.removeAttribute('disabled');
                 message_input.focus();
-            },1000);
+            }, 1000);
         });
     }
 }
@@ -101,7 +101,7 @@ game_questions_challenge_answer_input.onkeyup = (e) => {
 }
 
 game_questions_challenge_answer_input.onmouseenter = (e) => {
-    
+
 }
 
 game_questions_challenge_answer_input.onmouseleave = (e) => {
@@ -142,8 +142,8 @@ function show_page(page, back = true) {
     if (!back) { background_page.setAttribute('hidden', null); }
     page.removeAttribute('hidden');
     if (page == profile_page || page == loading_page) {
-        message_toggle.setAttribute('hidden',true);
-    }else{
+        message_toggle.setAttribute('hidden', true);
+    } else {
         message_toggle.removeAttribute('hidden');
     }
 }
@@ -496,7 +496,7 @@ function game_update(game_data) {
                 anime({
                     targets: '.versus-wrapper h2',
                     scale: [1, 50],
-                    opacity: [1.0,0.0],
+                    opacity: [1.0, 0.0],
                     zIndex: 3,
                     background: 'linear-gradient(120deg, var(--first-color) 0%, var(--second-color) 100%)',
                     color: ['rgba(255, 255, 255, 255)', 'rgba(255, 255, 255, 0)'],
@@ -728,11 +728,45 @@ function challenge_result_event(result_data) {
 
 
 function message_received(data) {
-    const message = document.createElement('p');
-    message.innerText = `${players[data.player_id].nickname} : ${data.message}`;
-    message_list.appendChild(message);
-    message_list.scrollTo(0,message_list.scrollHeight);
-    if(message_list.children.length > 100){
+    const player = players[data.player_id];
+    const _message_container = document.createElement('div');
+    const my_message = player.id == my_player_id;
+    my_message ? _message_container.classList.add('message-my') : _message_container.classList.add('message-other');
+    const first_wrapper = document.createElement('div');
+    _message_container.appendChild(first_wrapper);
+    const second_wrapper = document.createElement('div');
+    _message_container.appendChild(second_wrapper);
+
+    const player_profile_pic = document.createElement('div');
+    player_profile_pic.classList.add('profile-picture');
+    if (player.picture != null) player_profile_pic.style.backgroundImage = `url(data:image/jpeg;base64,${player.picture})`;
+
+    const content = document.createElement('p');
+    content.innerText = data.message;
+
+    if (my_message) {
+        second_wrapper.appendChild(player_profile_pic);
+        first_wrapper.appendChild(content);
+        first_wrapper.classList.add('content');
+    } else {
+        const nickname = document.createElement('h3');
+        nickname.innerText = players[data.player_id].nickname;
+        second_wrapper.appendChild(nickname);
+        second_wrapper.appendChild(content);
+        second_wrapper.classList.add('content');
+        first_wrapper.appendChild(player_profile_pic);
+        first_wrapper.style.marginRight = '1rem';
+    }
+
+
+    // const message = document.createElement('p');
+    // message.innerText = `${players[data.player_id].nickname} : ${data.message}`;
+    // message_list.appendChild(message);
+    message_list.appendChild(_message_container);
+
+
+    message_list.scrollTo(0, message_list.scrollHeight);
+    if (message_list.children.length > 50) {
         message_list.removeChild(message_list.children[0]);
     }
     if (!message_container.classList.contains('active')) {

@@ -186,7 +186,7 @@ button.round {
     /* line-height: ; */
 }
 
-/*  */
+/* Notifier */
 
 button.round.notifier {
     z-index: 11;
@@ -209,20 +209,24 @@ button.round.notifier.active::after {
     font-size: 1rem;
 }
 
-.box.notifier.active{
+.box.notifier.active {
     width: 80%;
     height: 45%;
-    display: flex!important;
+    display: flex !important;
     flex-flow: column;
 }
 
-.box.notifier{
-    display: none!important;
+.box.notifier {
+    display: none !important;
     left: 3rem;
     bottom: 3rem;
     position: absolute;
     z-index: 10;
-    
+    padding: 0;
+}
+
+.box.notifier input {
+    margin: 1rem;
 }
 
 .message-list {
@@ -230,6 +234,52 @@ button.round.notifier.active::after {
     width: 100%;
     overflow-y: scroll;
 }
+
+.message-list p {
+    font-size: 1rem;
+    overflow-wrap: break-word;
+}
+
+.message-list h3 {
+    font-size: 1.15rem;
+}
+
+.message-list>div {
+    margin: 1rem;
+    border-radius: 10px;
+    padding: 1rem;
+    color: white;
+    display: flex;
+    flex-flow: row;
+    box-shadow: var(--shadow-box);
+}
+
+.message-list>div.message-my {
+    background: var(--background-gradient);
+    justify-content: space-between;
+}
+
+.message-list>div.message-other {
+    background-color: white;
+    color: var(--dark-text-color);
+}
+
+.message-list>div>div {
+    display: flex;
+    flex-flow: column;
+    justify-content: start;
+}
+
+.message-list>div>div.content {
+    max-width: 85%;
+}
+
+.message-list .profile-picture {
+    min-width: 32px;
+    min-height: 32px;
+}
+
+
 
 .box {
     background-color: rgba(255, 255, 255, 0.825);
