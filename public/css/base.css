@@ -223,16 +223,19 @@ button.round.notifier.active::after {
     position: absolute;
     z-index: 10;
     padding: 0;
+    overflow: hidden;
 }
 
 .box.notifier input {
     margin: 1rem;
+    margin-top: 0;
 }
 
 .message-list {
     height: 100%;
     width: 100%;
     overflow-y: scroll;
+    border-radius: 10px;
 }
 
 .message-list p {
@@ -409,6 +412,27 @@ body {
     background-color: rgba(255, 255, 255, 0.596);
     border-radius: 50%;
     filter: var(--blur);
+}
+
+/*============ Scroller ============*/
+
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(154, 154, 154);
+    border-radius: 10px;
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-text-color); 
 }
 
 /*============ Responsive ============*/
