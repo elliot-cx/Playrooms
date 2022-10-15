@@ -592,7 +592,7 @@ function game_update(game_data) {
 
             if (game_data.voting_team == my_team) {
                 game_challenges_state.innerText = "C'est à ton équipe de jouer !";
-                game_challenges_instructions.innerText = "Vote la réponse que tu pense être la bonne !";
+                game_challenges_instructions.innerText = "Vote la réponse que tu penses être la bonne !";
             } else {
                 game_challenges_state.innerText = "C'est à l'équipe adverse de jouer !";
                 game_challenges_instructions.innerText = "Observe l'équipe adverse jouer !";
