@@ -92,7 +92,7 @@ game_questions_challenge_valid_btn.onclick = () => {
         socket.emit('game_data', userToken, room_code, game_questions_challenge_answer_input.value, () => {
             // game_questions_challenge_valid_btn.setAttribute('disabled',true);
             // game_questions_challenge_answer_input.setAttribute('disabled',true);
-            game_questions_challenge_answer_input.value = '';
+            // game_questions_challenge_answer_input.value = '';
         });
     }
 }
@@ -104,11 +104,13 @@ game_questions_challenge_answer_input.onkeyup = (e) => {
 }
 
 game_questions_challenge_answer_input.onmouseenter = (e) => {
-
+    game_questions_challenge_answer_input.classList.remove('blured');
 }
 
 game_questions_challenge_answer_input.onmouseleave = (e) => {
-
+    if (game_questions_challenge_answer_input.value != '') {
+        game_questions_challenge_answer_input.classList.add('blured');
+    }
 }
 
 const game_vote_challenge_card = game_vote_view.querySelector('div.challenge-card');
@@ -540,6 +542,7 @@ function game_update(game_data) {
             }
 
             show_countdown(game_data.next_step_time_start, game_data.next_step_time, () => {
+                game_questions_challenge_valid_btn.click();
                 // if (!game_questions_challenge_valid_btn.disabled) {
                 //     socket.emit('game_data',userToken,room_code,game_questions_challenge_answer_input.value,() =>{
                 //         game_questions_challenge_valid_btn.setAttribute('disabled',true);

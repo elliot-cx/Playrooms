@@ -168,15 +168,9 @@ module.exports = function (io) {
 
     module.update_player = (player_token, room, player_data, callback) => {
         const player_id = room.players_auth[player_token].id.toString();
+        const game_data = room.game_data;
+        //TODO #1 : Check game exist
         if (player_id !== undefined) {
-            const game_data = room.game_data;
-            // let data_to_send = {
-            //     teams: game_data.teams,
-            //     teams_points: game_data.teams_points,
-            //     state: game_data.state,
-            //     next_step_time: game_data.next_step_time,
-            //     next_step_time_start: game_data.next_step_time_start
-            // };
             const team = game_data.teams[0].includes(player_id) ? 0 : 1;
             switch (game_data.state) {
                 case 'questions':

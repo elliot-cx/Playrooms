@@ -111,7 +111,7 @@ io.on('connection', (socket) => {
                             socket.emit('close', 'alreadyConnected');
                         } else {
 
-                            // TODO : Vérification de si le joueur a été expulsé pour inactivité de +30s
+                            // TODO #2 : Vérification de si le joueur a été expulsé pour inactivité de +30s
                             lobby.check_timeout(room, player_id);
 
                             player.online = true;
@@ -171,7 +171,7 @@ io.on('connection', (socket) => {
 
                 // detecter si le joueur a un role spécial
 
-                //TODO : Vérification host
+                //TODO #3 : Vérification host
                 if (room.players[player_id]) {
 
                 }
@@ -295,7 +295,7 @@ io.on('connection', (socket) => {
 
                     //Gérer le kickout
 
-                    //TODO : vérifier la déconnexion de l'hote
+                    //TODO #4 : vérifier la déconnexion de l'hote
 
                     lobby.set_timeout(room, player.id, () => {
                         lobby.remove_player(room, player.id);
