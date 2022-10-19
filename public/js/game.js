@@ -259,7 +259,7 @@ function disconnect(reason) {
             message = "Tu es déjà connecté à cette partie !";
             break;
         case 'alreadyStarted':
-            message = "La partie a déjà commencé !";
+            message = "La partie a déjà commencée !";
             break;
         case 'banned':
             message = "Tu as été banni de cette salle !";
@@ -438,6 +438,14 @@ function game_update(game_data) {
                     }
                 }
             }
+            const start_wrapper = game_teams_view.querySelector(".start-wrapper");
+            start_wrapper.style.opacity = 1.0;
+            const versus_wrapper = game_teams_view.querySelector(".versus-wrapper");
+            versus_wrapper.style.opacity = 1.0;
+            versus_wrapper.style.scale = 1.0;
+            versus_wrapper.style.background = "none";
+            versus_wrapper.style.color = "white";
+            versus_wrapper.style.borderRadius = 0;
             switch_game_view(game_teams_view);
             let teams_animation = anime.timeline().add({
                 targets: game_team_containers[0].getElementsByClassName('player-container'),
@@ -447,7 +455,7 @@ function game_update(game_data) {
                 duration: 500,
                 delay: (el, i) => 500 * i
             }).add({
-                targets: '.versus-wrapper h2',
+                targets: versus_wrapper,
                 background: 'rgba(0, 0, 0, 0)',
                 scale: [14, 1],
                 opacity: [0, 1],
@@ -464,7 +472,7 @@ function game_update(game_data) {
             });
 
             anime({
-                targets: game_teams_view.querySelector(".start-wrapper h3"),
+                targets: start_wrapper,
                 easing: 'easeInQuint',
                 duration: 5000,
                 opacity: [0.0, 1.0]
@@ -493,13 +501,13 @@ function game_update(game_data) {
                 teams_animation.pause();
                 // game_teams_view.querySelector('.versus-wrapper h2').setAttribute('hidden',null);
                 anime({
-                    targets: game_teams_view.querySelector(".start-wrapper h3"),
+                    targets: start_wrapper,
                     easing: 'easeOutCubic',
                     duration: 100,
                     opacity: [1.0, 0]
                 });
                 anime({
-                    targets: '.versus-wrapper h2',
+                    targets: versus_wrapper,
                     scale: [1, 50],
                     opacity: [1.0, 0.0],
                     zIndex: 3,
@@ -519,8 +527,11 @@ function game_update(game_data) {
             break;
         case 'questions':
             switch_game_view(game_questions_view);
+            // Reset la page challenges
             game_questions_challenge_valid_btn.removeAttribute('disabled');
             game_questions_challenge_answer_input.removeAttribute('disabled');
+            game_questions_challenge_answer_input.value = '';
+            game_questions_challenge_answer_input.classList.remove('blured');
             game_challenges_challenge_card.classList.remove("flipped");
             anime({
                 targets: game_questions_view,
@@ -533,7 +544,7 @@ function game_update(game_data) {
             });
             game_questions_challenge_card_question.innerText = game_data.team_data.challenge[0];
 
-            // TODO : Mode de jeux avec réponse cachée
+            // TODO #5 : Mode de jeux avec réponse cachée
             if (game_data.team_data.challenge[1] != '') {
                 game_questions_challenge_card_answer.removeAttribute('hidden');
                 game_questions_challenge_card_answer.innerText = game_data.team_data.challenge[1];
