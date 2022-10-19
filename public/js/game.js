@@ -11,9 +11,12 @@ const message_toggle = document.getElementById('message-toggle');
 message_toggle.onclick = (e) => {
     if (message_container.classList.contains('active')) {
         message_container.classList.remove('active');
+        message_toggle.classList.remove('displayed')
+        message_toggle.blur();
     } else {
         message_container.classList.add('active');
         message_toggle.classList.remove('active');
+        message_toggle.classList.add('displayed');
         message_toggle.dataset.number = 0;
         message_input.focus();
         message_list.scrollTo(0, message_list.scrollHeight);

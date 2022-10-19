@@ -455,7 +455,25 @@ body {
 }
 
 @media screen and (max-height:500px) {
+
+    #message-toggle{
+        display: none;
+    }
+
+    #message-toggle.displayed{
+        display: block;
+    }
+
     .box.notifier.active{
         min-height: 80%;
     }
+
+    .game.page .top{
+        display: none!important;
+    }
+
+    .game.page .main{
+        height: 100vh!important;
+    }
+    
 }
