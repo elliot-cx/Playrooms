@@ -330,6 +330,12 @@ body>.base {
     margin-right: 0;
 }
 
+.game.page .teams-view .player-container p{
+    overflow: hidden;
+    max-width: 130px;
+    text-overflow: ellipsis;
+}
+
 /* Questions Part */
 
 .game.page .questions-view {

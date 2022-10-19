@@ -138,7 +138,7 @@ io.on('connection', (socket) => {
                         let player = {
                             id: player_id,
                             online: true,
-                            nickname: joinData.player_settings.nickname,
+                            nickname: joinData.player_settings.nickname.substring(0,16),
                             picture: joinData.player_settings.picture,
                             role: null
                         }
@@ -182,7 +182,7 @@ io.on('connection', (socket) => {
                 let player = {
                     id: player_id,
                     online: true,
-                    nickname: joinData.player_settings.nickname,
+                    nickname: joinData.player_settings.nickname.substring(0,16),
                     picture: joinData.player_settings.picture,
                     role: role
                 }
