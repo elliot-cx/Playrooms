@@ -1,31 +1,27 @@
 # Question pour des pigeons
 
----
+![img](https://cdn.discordapp.com/attachments/929500253734969378/1033445254008946739/unknown.png)
+
+
+
+Ce jeu est disponible à l'adresse suivante : [Playrooms.fr](http://playrooms.fr)
+
+
 
 ## 1. Prérequis
 
-Règles (originales) :
+Règles:
 
 * 2 équipes (rouge et bleu)
-* 16 jetons chacune
+* 16 points chacune
 * A chaque tour 2cartes sont distribués aux 2 équipes
-* 2 questions à inventer (dont au total 1 vrai et 2 fausses)
+* 2 questions à inventer (dont au total 1 vraie et 2 fausses)
 * Placement de l'intégralité des jetons
 * Ceux sur les mauvaises cases sont perdus
 
-Règles modifiés (non adopté) :
+## 2 . Améliorations
 
-* chaque joueur ont des jetons (points de vie)
-* chaque joueur doit déposer l'intégralité de ses jetons 
-* si le joueur n'a plus de jetons il est éliminé de l'équipe
-
-Idées supplémentaires : 
-
-* Bonus / Malus tout les 2 manches
-
-## 2 . Amélioration
-
-Utiliser des `Namespaces ` pour les lobbys et les `Room` pour le jeu en lui même :
+Utiliser des `Namespaces`  pour les lobbys et les `Room` pour le jeu en lui même :
 
 ```mermaid
 graph LR;
