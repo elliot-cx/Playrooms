@@ -1,4 +1,4 @@
-# Question pour des pigeons
+# Questions pour des pigeons
 
 ![img](https://cdn.discordapp.com/attachments/929500253734969378/1033445254008946739/unknown.png)
 
