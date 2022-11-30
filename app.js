@@ -58,7 +58,7 @@ app.get('*', (req, res) => {
 //lancer le serveur
 
 server.listen(port, () => {
-    console.log('Server is now running...');
+    console.log(`Server is now running on port ${port}...`);
     // setInterval(() => {
     //     console.clear();
     //     const used = process.memoryUsage().heapUsed / 1024 / 1024;
