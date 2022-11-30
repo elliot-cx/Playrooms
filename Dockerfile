@@ -1,5 +1,7 @@
 FROM node:18
 
+ENV PORT=8080
+
 # Create app directory
 WORKDIR /usr/src/app
 
