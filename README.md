@@ -16,7 +16,7 @@ Ce projet a pour but d'expérimenter le développement d'applications Full Stack
 
 ### Technologies utilisées dans le projet :
 
-* ``Socket.io`` qui permet la communication en temps réel entre les joueur en utiliser les Web sockets.
+* ``Socket.io`` qui permet la communication en temps réel entre les joueur en utilisant les Web sockets.
 * ``Express.js`` qui permet de déployer un serveur HTTP.
 * ``Anime.js`` qui permet de faire des animations avancées en javascript 
 
@@ -26,10 +26,11 @@ Règles du jeu (simplifiées) :
 
 * 2 équipes (rouge et bleu)
 * 16 points chacune
-* A chaque tour 2cartes sont distribués aux 2 équipes
-* 2 questions à inventer (dont au total 1 vraie et 2 fausses)
-* Placement de l'intégralité des jetons
-* Ceux sur les mauvaises cases sont perdus
+* A chaque tour 2 questions distinctes sont distribuées aux 2 équipes
+* Chaque équipe devra composé une réponse 2 questions à inventer (dont au total 1 vraie et 2 fausses)
+* Chaque équipe devra pariée l'intégralité de ses points sur une ou plusieurs réponses proposées
+* Les points disposés sur les mauvaises réponses sont perdus
+* La partie se termine quand une ou aucune des deux équipes n'a plus de points
 
 ## 2 . Améliorations possibles
 
