@@ -6,7 +6,7 @@ Ce jeu est un jeu d'équipe en ligne disponible à la fois sur PC et mobile grâ
 
 Ce jeu est disponible à l'adresse suivante : ~~[Playrooms.fr](http://playrooms.fr)~~
 
-La nouvelle adresse temporaire du site web est : http://51.75.125.2:8080/
+La nouvelle adresse temporaire du site web est : http://51.75.30.123/
 
 ## 1. Introduction
 
