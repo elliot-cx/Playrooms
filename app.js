@@ -70,8 +70,7 @@ server.listen(port, () => {
 //sockets events
 
 io.on('connection', (socket) => {
-    var address = socket.handshake.address;
-    console.log('New connection from ' + address.address + ':' + address.port);
+    console.log('New connection from ' + socket.conn.remoteAddress);
     // console.log(io.engine.clientsCount);
 
     // lors de la tentative de connexion à une room
